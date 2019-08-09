@@ -1,5 +1,10 @@
 ---
 title: "Preliminary Text-Analyses"
+knit: (function(input_file, encoding) {
+  out_dir <- 'docs';
+  rmarkdown::render(input_file,
+ encoding=encoding,
+ output_file='index.html')})
 author: "Cristian Rodriguez"
 date: "8/8/2019"
 output:
@@ -179,6 +184,8 @@ ggcorrplot(mat, type = "lower", hc.order = FALSE, p.mat = pmat$p, lab = TRUE, in
 **Comments**: Responsiveness, Conflict and Mind perceived by partner (`alt_Resp`, `alt_Conf`, and `alt_Dehum` respectively) are negatively associated with words related to Social relations, Biological Processes and Drives (positively for conflict); yet, positively associated with Informal language. Also perceived Conflict is associated with less affective words and more cognitive words.
 
 ## Linear Plots
+
+These plots represent the linear relationship of each word category with all three outcomes. Datapoints were not plotted to avoid getting messy plots. 
 ``` {r plots, echo=FALSE, error = FALSE, message= FALSE, warning=FALSE,fig.align="center", fig.dim=c(12,12)}
 ## Barplot: 3 outcomes, by categories 
 # Affective terms
@@ -287,6 +294,7 @@ library(ggpubr)
 ggarrange(A, B, C, D, E, F, G, H, I, legend = "bottom", common.legend = TRUE, nrow = 3, ncol = 3)
 
 ```
+**Comments**: Note that Social terms, Biological words, Drive-related words -and to some extent Cognitive terms- describe similar patterns: the more frequent the use, the less likeable is the partner
 
 ## Stepwise Regressions
 For each one of the three partner perception outcomes, I ran a 10-fold crossvalidated stepwise regression model (ML approach to evaluate the linear model with best fit over 10 simulations). As predictors, all sub-categories of words were introduced - except for function words were excluded from the analyses, since they were not giving consistent results and are hard to intepret. The three best models generated are presented in this table. Only a few word-types are significant predictors of all three predictors.
