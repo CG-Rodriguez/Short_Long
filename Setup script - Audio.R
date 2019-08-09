@@ -1,11 +1,8 @@
 library(tidyverse)
-library(tidytext)
-library(ggplot2)
-library(quanteda)
 library(textreadr)
 library(stringr)
 ########### Short vs. Long Experiment - Condition: AUDIO #########
-#### Getting the data #####
+###### Getting the data #####
 
 Doc1<-read_docx(file = "./Raw Data/Cleaned Long vs. Short - Short Transcripts.docx")
 Doc2<-read_docx(file = "./Raw Data/Cleaned Long vs. Short - Long Transcripts.docx")
@@ -15,11 +12,11 @@ Corpus2<-str_split(Doc2, pattern = ":")
 
 Raw_text1<-data.frame( Pair = vector(mode = "character", length = length(Corpus1)),
                       Person = vector(mode = "character", length = length(Corpus1)),
-                      text = vector(mode = "character", length = length(Corpus1)), stringsAsFactors = FALSE)
+                      text = vector(mode = "character", length = length(Corpus1)), stringsAsFactors = F)
 
 Raw_text2<-data.frame( Pair = vector(mode = "character", length = length(Corpus2)),
                        Person = vector(mode = "character", length = length(Corpus2)),
-                       text = vector(mode = "character", length = length(Corpus2)), stringsAsFactors = FALSE)
+                       text = vector(mode = "character", length = length(Corpus2)), stringsAsFactors = F)
 
 ## loop to transfer the texts into a data frame ##1
 for (i in 1:length(Corpus1)) {
@@ -97,7 +94,7 @@ for (i in 1:nrow(index_pairs2)){
 }
 
 
-#########Structuring the data ################
+###### Structuring the data ################
 ### Putting together pair information and texts 
 
 Clean_texts1<-cbind(index_pairs1[,1:3], Raw_text1[,2:3])
@@ -172,22 +169,33 @@ for (i in 4:nrow(Clean_texts2)){
 Clean_texts1$text<-gsub("\\[name redacted\\]", " ", Clean_texts1$text) 
 Clean_texts2$text<-gsub("\\[name redacted\\]", " ", Clean_texts2$text) 
 
-############## Different Data Structures #########
+####  Different Data Structures #########
+Clean_Sh_Au<-data.frame(Clean_texts1, 
+                        Medium = rep("Audio", nrow(Clean_texts1)), 
+                        Extension = rep("Short", nrow(Clean_texts1)), stringsAsFactors = F)
+Clean_Ln_Au<-data.frame(Clean_texts2,
+                        Medium = rep("Audio", nrow(Clean_texts2)), 
+                        Extension = rep("Long", nrow(Clean_texts2)), stringsAsFactors = F)
 
-### Tokenize the texts for frequency analyses #########
+##  Tokenize the texts for frequency analyses #########
 
 Tok_Sh_Au<-unnest_tokens(Clean_texts1, input = text, output = terms ) 
 Tok_Ln_Au<-unnest_tokens(Clean_texts2, input = text, output = terms ) 
 
-### Texts organized by participant ####
+##  Texts organized by participant ####
 All_Ps1<-unique(Clean_texts1$ID)
-By_Part_Sh_Au<-data.frame(ID = unique(Clean_texts1$ID),
-                 text = vector(mode = "character", length = length(unique(Clean_texts1$ID))), 
-                 stringsAsFactors = FALSE)
+By_Part_Sh_Au<-data.frame(ID = All_Ps1,
+                          Medium = rep("Audio", length(All_Ps1)),
+                          Extension = rep("Short", length(All_Ps1)),
+                          text = vector(mode = "character", length = length(All_Ps1)), 
+                          stringsAsFactors = F)
+                 
 All_Ps2<-unique(Clean_texts2$ID)
-By_Part_Ln_Au<-data.frame(ID = unique(Clean_texts2$ID),
-                          text = vector(mode = "character", length = length(unique(Clean_texts2$ID))), 
-                          stringsAsFactors = FALSE)
+By_Part_Ln_Au<-data.frame(ID = All_Ps2,
+                          Medium = rep("Audio", length(All_Ps2)),
+                          Extension = rep("Long", length(All_Ps2)),
+                          text = vector(mode = "character", length = length(All_Ps2)), 
+                          stringsAsFactors = F)
 
 
 for(i in All_Ps1){
@@ -202,16 +210,20 @@ for(i in All_Ps2){
 }
 
 
-###  Texts organized by pair ####
+##  Texts organized by pair ####
 All_Pairs1<-as.vector(unique(Clean_texts1$Pair))
-Convo_Sh_Au<-data.frame(ID = unique(Clean_texts1$Pair),
-                           text = vector(mode = "character", length = length(unique(Clean_texts1$Pair))), 
-                           stringsAsFactors = FALSE)
+Convo_Sh_Au<-data.frame(ID = All_Pairs1,
+                        Medium = rep("Audio", length(All_Pairs1)),
+                        Extension = rep("Short", length(All_Pairs1)),   
+                        text = vector(mode = "character", length = length(All_Pairs1)), 
+                        stringsAsFactors = F)
 
 All_Pairs2<-as.vector(unique(Clean_texts2$Pair))
 Convo_Ln_Au<-data.frame(ID = unique(Clean_texts2$Pair),
-                      text = vector(mode = "character", length = length(unique(Clean_texts2$Pair))), 
-                      stringsAsFactors = FALSE)
+                        Medium = rep("Audio", length(All_Pairs2)),
+                        Extension = rep("Long", length(All_Pairs2)),   
+                        text = vector(mode = "character", length = length(All_Pairs2)), 
+                        stringsAsFactors = F)
 
 
 for(i in All_Pairs1){
