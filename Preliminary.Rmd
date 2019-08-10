@@ -37,7 +37,6 @@ library(summarytools)
 st_options(plain.ascii = FALSE,style = "rmarkdown",footnote = NA,subtitle.emphasis = FALSE)
 st_css()
 
-
 ```
 # Data Structuring
 The transcriptions were processed by separating each line of text, labeling pair, participant, topic, extension and medium. Different data structures were produced (word-level, intervention-level, person-level, pair-level, condition-level). For these results, all participant interventions were grouped and analyzed with the `liwc_alike()` function of the `quanteda` package. The word categories are identical to those from the LIWC software. Additionally, output scores (how responsive was your partner, how conflicted was the conversation, "how much mind" does your partner have) were appended for each participant, as well as the scores given by the conversation partner. Variables labeled as `alt_` indicate partner perception.
