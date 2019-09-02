@@ -186,8 +186,8 @@ Output[,c(1,2,4,5:7,8:10,17, 35+3, 41+3, 46+3, 53+3, 57+3, 62+3, 71+3, 81+3)] %>
                               "Biological ('eat', 'blood', 'pain')")))
   
 ## Liwc categories per medium
-Output[,c(1,2,4,5:7,8:10,17, 35+3, 41+3, 46+3, 53+3, 57+3, 62+3, 71+3, 81+3)] %>% #View()
-  melt(id.vars = 1:3, measure.vars = 10:18 ) %>%
+Output[,c(1,2,21, 42, 48, 53, 60, 64, 69, 78, 88)] %>%
+  melt(id.vars = 1:2, measure.vars = 3:11 ) %>%
   ggplot(aes(reorder(variable, value), value, fill = Medium)) + 
   stat_summary(geom = "col",position = "dodge2") + 
   stat_summary(geom = "errorbar", position = "dodge2") + 
