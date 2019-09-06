@@ -1,0 +1,809 @@
+---
+title: "Preliminary Text-Analyses"
+author: "Cristian Rodriguez"
+date: "8/8/2019"
+knit: (function(input_file, encoding) {
+  out_dir <- 'docs';
+  rmarkdown::render(input_file,
+ encoding=encoding,
+ output_file=file.path(dirname(input_file), out_dir, 'index.html'))})
+
+---
+
+```{r setup, include=FALSE}
+
+load("Output.Rdata")
+load("Huge.Rdata")
+library(ggcorrplot)
+library(reshape)
+library(MASS)
+library(tidyverse)
+library(knitr)
+library(rmarkdown)
+library(psych)
+library(kableExtra)
+library(quanteda.dictionaries)
+library(quanteda)
+library(lavaan)
+library(semPlot)
+opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, error = FALSE)
+
+library(summarytools)
+st_options(plain.ascii = FALSE,style = "grid",footnote = NA,subtitle.emphasis = FALSE)
+st_css()
+
+```
+# Data Structuring
+The transcriptions were processed by separating each line of text, labeling pair, participant, topic, extension and medium. Different data structures were produced (word-level, intervention-level, person-level, pair-level, condition-level). For these results, all participant interventions were grouped and analyzed with the `liwc_alike()` function of the `quanteda` package. The word categories are identical to those from the LIWC software. Additionally, output scores (how responsive was your partner, how conflicted was the conversation, "how much mind" does your partner have) were appended for each participant, as well as the scores given by the conversation partner. Variables labeled as `alt_` indicate partner perception.
+
+# Descriptives
+```{r general_descriptives, results = 'asis',comment = NA, prompt = FALSE, cache = FALSE}
+  
+dfSummary(Output[,c(2,3,6:8, 12:14, 21, 42, 48, 53, 60, 64, 69, 78, 88)], round.digits = 2, valid.col = FALSE, headings = FALSE, na.col = FALSE, graph.magnif = .75,  tmp.img.dir = "/tmp", silent = TRUE)
+
+```
+
+## By Medium
+``` {r descriptives}
+
+Vars<-c("Mind - attributed by partner", "Conflict - attributed by partner", "Responsiveness - attributed by partner", "Function words", " Affective words", "Social words","Cognitive words", " Perceptual words", "Biological words", "Drive-related words" , "Relative words (space, time)", "Informal language")
+
+Output[,c(2,6:8, 12:14, 21, 42, 48, 53, 60, 64, 69, 78, 88)] %>%
+  group_by(Medium) %>%
+  summarize(Mind = mean(alt_Dehum), Conflict = mean(alt_Conf), Responsiveness = mean(alt_Resp), Function = mean(function..function.words.), 
+            Affective = mean(affect..affect.), Social = mean(social..social.), Cognitive = mean(cogproc..cognitive.processes.),
+            Perceptual = mean(percept..perceptual.processes.), 
+            Biological = mean(bio..biological.processes.), 
+            Drives = mean(drives..drives.), Orientation = mean(relativ..relativity.), 
+            Informal = mean(informal..informal.language.))%>%
+  kable( digits = 2, align = "c",caption = "Word categories by Medium") %>%
+  kable_styling(full_width = TRUE)
+  
+Output[,c(1,2,21, 42, 48, 53, 60, 64, 69, 78, 88)] %>%
+  melt(id.vars = 1:2, measure.vars = 3:11 ) %>%
+  ggplot(aes(reorder(variable, value), value, fill = Medium)) + 
+  stat_summary(geom = "col",position = "dodge2") + 
+  stat_summary(geom = "errorbar", position = "dodge2") + 
+  coord_flip() + labs(y = "Proportion", x = "LIWC term categories", title = "Term Frequency, by Medium",
+                      caption = "n = 406") +
+  scale_x_discrete(labels = rev(c("Function words","Cognitive ('know', 'should', 'think)", 
+                                  "Social ('mate', 'talk', 'they')",
+                                  "Movement ('go', 'end', 'in')",
+                                  "Drives (affiliation, power, etc.)",
+                                  "Affect ('happy', 'cry', 'sweet')",
+                                  "Informal (fillers, swear, etc.)",
+                                  "Perceptual ('see', 'hear', 'feel')",
+                                  "Biological ('eat', 'blood', 'pain')")))
+
+Results<-data.frame( "Variable" = Vars,
+                     "t-stat" = vector( mode = "numeric", length = 12),
+                     "p-value" = vector( mode = "numeric", length = 12),
+                     "LL" = vector( mode = "numeric", length = 12),
+                     "UL" = vector( mode = "numeric", length = 12),
+                     "Cohens D" = vector( mode = "numeric", length = 12), 
+                     stringsAsFactors = FALSE)
+
+for (i in 1:12) {
+  num<-c(12:14,21, 42, 48, 53, 60, 64, 69, 78, 88)[i]
+  names(Output)[num]-> name
+  res<-t.test(data=Output,    Output[,name] ~ as.factor(Output$Medium) )
+  Results[i,2]<-as.numeric(res$statistic)
+  Results[i,3]<-as.numeric(res$p.value)
+  Results[i,4:5]<-as.numeric(res$conf.int)
+  Results[i,6]<-t2d(Results[i,2],  nrow(Output))
+}
+  
+Results %>%
+  mutate(Sig  = if_else(p.value < .001, "***", 
+                       if_else(p.value <= .01, "**", 
+                               if_else(p.value <= .05, "*", "")))) %>%
+kable(digits = 3, caption = "Audio minus Text (Negative estimates indicate higher values for Text)") %>%
+  kable_styling(full_width = TRUE)
+
+```
+
+
+**Comments**:  Higher mind (*t* =`r round(Results[1,2],2)`,*d* = `r round( Results[1,6],2)` and responsiveness  (*t* =`r round(Results[3,2], 3)`,*d* = `r round(Results[3,6],2)`) attributed by partner in Audio over Text, but no differences in Conflict. Informal language is higher (*t* =`r round(Results[12,2],2)`,*d* = `r round( Results[12,6],2)`) in Audio, whereas words related to affect (*t* =`r round(Results[5,2],2)`,*d* = `r round( Results[5,6],2)`), social relations (*t* =`r round(Results[6,2],2)`,*d* = `r round( Results[6,6],2)`), biological processes (*t* =`r round(Results[9,2],2)`,*d* = `r round( Results[9,6],2)`)and drives (affiliation, power, etc.; *t* =`r round(Results[10,2],2)`,*d* = `r round( Results[10,6],2)`) are more predominant in Text-based conversations.
+
+
+## By Condition
+
+``` {r descriptives2}
+
+Output[,c(3,6:8, 12:14, 21, 42, 48, 53, 60, 64, 69, 78, 88)] %>%
+  group_by(Extension) %>%
+  summarize(Mind = mean(alt_Dehum), Conflict = mean(alt_Conf), Responsiveness = mean(alt_Resp), Function = mean(function..function.words.), 
+            Affective = mean(affect..affect.), Social = mean(social..social.), Cognitive = mean(cogproc..cognitive.processes.),
+            Perceptual = mean(percept..perceptual.processes.), 
+            Biological = mean(bio..biological.processes.), 
+            Drives = mean(drives..drives.), Orientation = mean(relativ..relativity.), 
+            Informal = mean(informal..informal.language.))%>%
+  kable( digits = 2, align = "c",caption = "Word categories by Extension") %>% 
+  kable_styling(full_width = TRUE)
+
+
+Output[,c(1,3,21, 42, 48, 53, 60, 64, 69, 78, 88)] %>%
+  melt(id.vars = 1:2, measure.vars = 3:11 ) %>%
+  ggplot(aes(reorder(variable, value), value, fill = Extension)) + 
+  stat_summary(geom = "col",position = "dodge2") + 
+  stat_summary(geom = "errorbar", position = "dodge2") + 
+  coord_flip() + labs(y = "Proportion", x = "LIWC term categories", title = "Term Frequency, by Extension",
+                      caption = "n = 406") +
+  scale_x_discrete(labels = rev(c("Function words","Cognitive", "Social","Movement","Drives", "Affect",
+                                  "Informal", "Perceptual","Biological")))
+
+
+for (i in 1:12) {
+  num<-c(12:14,21, 42, 48, 53, 60, 64, 69, 78, 88)[i]
+  names(Output)[num]-> name
+  res<-t.test(data=Output,    Output[,name] ~ as.factor(Output$Extension) )
+  Results[i,2]<-as.numeric(res$statistic)
+  Results[i,3]<-as.numeric(res$p.value)
+  Results[i,4:5]<-as.numeric(res$conf.int)
+  Results[i,6]<-t2d(Results[i,2],  nrow(Output))
+}
+  
+Results %>%
+  mutate(Sig  = if_else(p.value < .001, "***", 
+                       if_else(p.value <= .01, "**", 
+                               if_else(p.value <= .05, "*", "")))) %>%
+kable(digits = 3, caption = "Long minus Short  (Negative estimates indicate higher values for Short)") %>% 
+  kable_styling(full_width = TRUE)
+
+```
+
+
+
+**Comments**: There are basically no significant differences among outcomes or language use between Short and Long conditions. 
+
+# Analyses
+
+## Correlations
+
+```{r correlations, fig.align="center", fig.dim=c(10,12), fig.cap="NOTE: blank spaces are non-significant correlations"}
+library(ggcorrplot)
+
+mat<-round(cor(Output[,c(6:8, 12:14, 21, 42, 48, 53, 60, 64, 69, 78, 88)], ),3)
+pmat<-corr.p(mat, n= nrow(Output))
+ggcorrplot(mat, type = "lower", hc.order = FALSE, p.mat = pmat$p, lab = TRUE, insig = "blank", lab_size = 4) + 
+  labs(caption = "Zero-order correlations")
+```
+
+**Comments**: Responsiveness, Conflict and Mind perceived by partner (`alt_Resp`, `alt_Conf`, and `alt_Dehum` respectively) are negatively associated with words related to Social relations, Biological Processes and Drives (positively for conflict); yet, positively associated with Informal language. Also perceived Conflict is associated with less affective words and more cognitive words.
+
+## Linear Plots
+
+These plots represent the linear relationship of each word category with all three outcomes. Datapoints were not plotted to avoid getting messy plots. 
+``` {r plots, fig.align="center", fig.dim=c(12,12), evaluate = FALSE}
+## Barplot: 3 outcomes, by categories 
+# Affective terms
+A<-ggplot(Output) + 
+  #geom_point(aes(affect..affect.,alt_Dehum)) + 
+  geom_smooth(aes(affect..affect.,alt_Dehum, color = "red"), method = "lm") +
+  #geom_point(aes(affect..affect.,alt_Conf)) + 
+  geom_smooth(aes(affect..affect.,alt_Conf, color = "green"), method = "lm") +  
+  #geom_point(aes(affect..affect.,alt_Resp)) + 
+  geom_smooth(aes(affect..affect.,alt_Resp, color = "blue"), method = "lm") +
+  scale_color_discrete(name = "Attributed", labels = c("Dehumanization", "Conflictive", "Responsiveness")) +
+  labs(title = "Affective terms",x = "Proportion", y = "Partner attributions")
+
+# Function words
+B<-ggplot(Output) + 
+  #geom_point(aes(function..function.words.,alt_Dehum)) + 
+  geom_smooth(aes(function..function.words.,alt_Dehum, color = "red"), method = "lm") +
+  #geom_point(aes(function..function.words.,alt_Conf)) + 
+  geom_smooth(aes(function..function.words.,alt_Conf, color = "green"), method = "lm") +  
+  #geom_point(aes(function..function.words.,alt_Resp)) + 
+  geom_smooth(aes(function..function.words.,alt_Resp, color = "blue"), method = "lm") +
+  scale_color_discrete(name = "Attributed", labels = c("Dehumanization", "Conflictive", "Responsiveness")) +
+  labs(title = "Function Words",x = "Proportion", y = "Partner attributions")
+
+# Social terms
+C<-ggplot(Output) + 
+  #geom_point(aes(social..social.,alt_Dehum)) + 
+  geom_smooth(aes(social..social.,alt_Dehum, color = "red"), method = "lm") +
+  #geom_point(aes(social..social.,alt_Conf)) + 
+  geom_smooth(aes(social..social.,alt_Conf, color = "green"), method = "lm") +  
+  #geom_point(aes(social..social.,alt_Resp)) + 
+  geom_smooth(aes(social..social.,alt_Resp, color = "blue"), method = "lm") +
+  scale_color_discrete(name = "Attributed", labels = c("Dehumanization", "Conflictive", "Responsiveness")) +
+  labs(title = "Social terms",x = "Proportion", y = "Partner attributions")
+
+# Cognitive terms
+D<-ggplot(Output) + 
+  #geom_point(aes(cogproc..cognitive.processes.,alt_Dehum)) + 
+  geom_smooth(aes(cogproc..cognitive.processes.,alt_Dehum, color = "red"), method = "lm") +
+  #geom_point(aes(cogproc..cognitive.processes.,alt_Conf)) + 
+  geom_smooth(aes(cogproc..cognitive.processes.,alt_Conf, color = "green"), method = "lm") +  
+  #geom_point(aes(cogproc..cognitive.processes.,alt_Resp)) + 
+  geom_smooth(aes(cogproc..cognitive.processes.,alt_Resp, color = "blue"), method = "lm") +
+  scale_color_discrete(name = "Attributed", labels = c("Dehumanization", "Conflictive", "Responsiveness")) +
+  labs(title = "Cognitive terms",x = "Proportion", y = "Partner attributions")
+
+
+# Perceptual terms
+E<-ggplot(Output) + 
+  #geom_point(aes(percept..perceptual.processes.,alt_Dehum)) + 
+  geom_smooth(aes(percept..perceptual.processes.,alt_Dehum, color = "red"), method = "lm") +
+  #geom_point(aes(percept..perceptual.processes.,alt_Conf)) + 
+  geom_smooth(aes(percept..perceptual.processes.,alt_Conf, color = "green"), method = "lm") +  
+  #geom_point(aes(percept..perceptual.processes.,alt_Resp)) + 
+  geom_smooth(aes(percept..perceptual.processes.,alt_Resp, color = "blue"), method = "lm") +
+  scale_color_discrete(name = "Attributed", labels = c("Dehumanization", "Conflictive", "Responsiveness")) +
+  labs(title = "Perceptual terms",x = "Proportion", y = "Partner attributions")
+
+# Biological terms
+F<-ggplot(Output) + 
+  #geom_point(aes(bio..biological.processes.,alt_Dehum)) + 
+  geom_smooth(aes(bio..biological.processes.,alt_Dehum, color = "red"), method = "lm") +
+  #geom_point(aes(bio..biological.processes.,alt_Conf)) + 
+  geom_smooth(aes(bio..biological.processes.,alt_Conf, color = "green"), method = "lm") +  
+  #geom_point(aes(bio..biological.processes.,alt_Resp)) + 
+  geom_smooth(aes(bio..biological.processes.,alt_Resp, color = "blue"), method = "lm") +
+  scale_color_discrete(name = "Attributed", labels = c("Dehumanization", "Conflictive", "Responsiveness")) +
+  labs(title = "Biological terms",x = "Proportion", y = "Partner attributions")
+
+# Drive terms
+G<-ggplot(Output) + 
+  #geom_point(aes(drives..drives.,alt_Dehum)) + 
+  geom_smooth(aes(drives..drives.,alt_Dehum, color = "red"), method = "lm") +
+  #geom_point(aes(drives..drives.,alt_Conf)) + 
+  geom_smooth(aes(drives..drives.,alt_Conf, color = "green"), method = "lm") +  
+  #geom_point(aes(drives..drives.,alt_Resp)) + 
+  geom_smooth(aes(drives..drives.,alt_Resp, color = "blue"), method = "lm") +
+  scale_color_discrete(name = "Attributed", labels = c("Dehumanization", "Conflictive", "Responsiveness")) +
+  labs(title = "Drive-related terms",x = "Proportion", y = "Partner attributions")
+
+# Informal terms
+H<-ggplot(Output) + 
+  #geom_point(aes(informal..informal.language.,alt_Dehum)) + 
+  geom_smooth(aes(informal..informal.language.,alt_Dehum, color = "red"), method = "lm") +
+  #geom_point(aes(informal..informal.language.,alt_Conf)) + 
+  geom_smooth(aes(informal..informal.language.,alt_Conf, color = "green"), method = "lm") +  
+  #geom_point(aes(informal..informal.language.,alt_Resp)) + 
+  geom_smooth(aes(informal..informal.language.,alt_Resp, color = "blue"), method = "lm") +
+  scale_color_discrete(name = "Attributed", labels = c("Dehumanization", "Conflictive", "Responsiveness")) +
+  labs(title = "Informal terms", x = "Proportion", y = "Partner attributions")
+
+# Relative terms
+I<-ggplot(Output) + 
+  #geom_point(aes(relativ..relativity.,alt_Dehum)) + 
+  geom_smooth(aes(relativ..relativity.,alt_Dehum, color = "red"), method = "lm") +
+  #geom_point(aes(relativ..relativity.,alt_Conf)) + 
+  geom_smooth(aes(relativ..relativity.,alt_Conf, color = "green"), method = "lm") +  
+  #geom_point(aes(relativ..relativity.,alt_Resp)) + 
+  geom_smooth(aes(relativ..relativity.,alt_Resp, color = "blue"), method = "lm") +
+  scale_color_discrete(name = "Attributed", labels = c("Dehumanization", "Conflictive", "Responsiveness")) +
+  labs(title = "Relative terms (space, time, movement)",
+       x = "Proportion", y = "Partner attributions")
+
+
+library(ggpubr)
+ggarrange(A, B, C, D, E, F, G, H, I, legend = "bottom", common.legend = TRUE, nrow = 3, ncol = 3)
+
+```
+**Comments**: Note that Social terms, Biological words, Drive-related words -and to some extent Cognitive terms- describe similar patterns: the more frequent the use, the less likeable is the partner
+
+## Stepwise Regressions
+For each one of the three partner perception outcomes, I ran astepwise regression model. As predictors, all sub-categories of words were introduced - except for function words were excluded from the analyses, since they were not giving consistent results and are hard to intepret. The three  models were generated by taken the best regression from the stepwise analyses, and keeping only those predictors whose `Beta` coefficient was higher than 1.
+
+
+``` {r stepwise,  results='asis'}
+library(MASS)
+library(lm.beta)
+
+fullR<-lm(data=Output, alt_Resp ~ affect..affect..posemo..positive.emotions. +
+            affect..affect..negemo..negative.emotions..anx..anx. +
+            affect..affect..negemo..negative.emotions..anger..anger. +
+            affect..affect..negemo..negative.emotions..sad..sad. + 
+            social..social..family..family. + 
+            social..social..friend..friends. + 
+            social..social..female..female. + 
+            social..social..male..male. + 
+            cogproc..cognitive.processes..insight..insight. + 
+            cogproc..cognitive.processes..cause..causal. +
+            cogproc..cognitive.processes..discrep..discrepancies. + 
+            cogproc..cognitive.processes..tentat..tentative. + 
+            cogproc..cognitive.processes..certain..certainty. +
+            cogproc..cognitive.processes..differ..differentiation. + 
+            percept..perceptual.processes..see..see. + 
+            percept..perceptual.processes..hear..hear. + 
+            percept..perceptual.processes..feel..feel. + 
+            bio..biological.processes..body..body. + 
+            bio..biological.processes..health..health. + 
+            bio..biological.processes..sexual..sexual. + 
+            bio..biological.processes..ingest..ingest. + 
+            drives..drives..affiliation..affiliation. + 
+            drives..drives..achieve..achievement. + 
+            drives..drives..power..power. + 
+            drives..drives..reward..reward. + 
+            drives..drives..risk..risk. + 
+            timeorient..time.orientation..focuspast..past.focus. + 
+            timeorient..time.orientation..focuspresent..present.focus. + 
+            timeorient..time.orientation..focusfuture..future.focus. + 
+            relativ..relativity..motion..motion. + 
+            relativ..relativity..space..space. + 
+            relativ..relativity..time..time. + 
+            persconc..personal.concerns..work..work. + 
+            persconc..personal.concerns..leisure..leisure. + 
+            persconc..personal.concerns..home..home. + 
+            persconc..personal.concerns..money..money. + 
+            persconc..personal.concerns..relig..religion. + 
+            persconc..personal.concerns..death..death. + 
+            informal..informal.language..swear..swear. + 
+            informal..informal.language..netspeak..netspeak. + 
+            informal..informal.language..assent..assent. + 
+            informal..informal.language..nonflu..nonfluencies. + 
+            informal..informal.language..filler..filler.words.)
+
+stepR<-stepAIC(fullR, direction = "both", trace = FALSE)
+FmlaR<- stepR$call$formula
+
+BestR<-lm(data=Output, FmlaR) %>%
+  lm.beta() %>% summary.lm.beta() 
+
+BestR$coefficients %>%
+  as.data.frame() %>% 
+  mutate(names = row.names(.)) %>%
+  dplyr::filter(abs(Standardized) >= .1) %>% 
+  dplyr::select(names) %>% unlist() %>%
+  paste("alt_Resp ~", ., collapse = "+")  -> Best_F_Res
+
+Best_FitR<-lm(data=Output, formula = alt_Resp ~ affect..affect..negemo..negative.emotions..sad..sad.+ 
+                social..social..friend..friends.+
+                social..social..female..female.+
+                cogproc..cognitive.processes..insight..insight.+
+                cogproc..cognitive.processes..cause..causal.+
+                drives..drives..affiliation..affiliation.+
+                timeorient..time.orientation..focuspresent..present.focus.+
+                informal..informal.language..assent..assent.)
+
+fullC<-lm(data=Output, alt_Conf ~ affect..affect..posemo..positive.emotions. +
+            affect..affect..negemo..negative.emotions..anx..anx. +
+            affect..affect..negemo..negative.emotions..anger..anger. +
+            affect..affect..negemo..negative.emotions..sad..sad. + 
+            social..social..family..family. + 
+            social..social..friend..friends. + 
+            social..social..female..female. + 
+            social..social..male..male. + 
+            cogproc..cognitive.processes..insight..insight. + 
+            cogproc..cognitive.processes..cause..causal. +
+            cogproc..cognitive.processes..discrep..discrepancies. + 
+            cogproc..cognitive.processes..tentat..tentative. + 
+            cogproc..cognitive.processes..certain..certainty. +
+            cogproc..cognitive.processes..differ..differentiation. + 
+            percept..perceptual.processes..see..see. + 
+            percept..perceptual.processes..hear..hear. + 
+            percept..perceptual.processes..feel..feel. + 
+            bio..biological.processes..body..body. + 
+            bio..biological.processes..health..health. + 
+            bio..biological.processes..sexual..sexual. + 
+            bio..biological.processes..ingest..ingest. + 
+            drives..drives..affiliation..affiliation. + 
+            drives..drives..achieve..achievement. + 
+            drives..drives..power..power. + 
+            drives..drives..reward..reward. + 
+            drives..drives..risk..risk. + 
+            timeorient..time.orientation..focuspast..past.focus. + 
+            timeorient..time.orientation..focuspresent..present.focus. + 
+            timeorient..time.orientation..focusfuture..future.focus. + 
+            relativ..relativity..motion..motion. + 
+            relativ..relativity..space..space. + 
+            relativ..relativity..time..time. + 
+            persconc..personal.concerns..work..work. + 
+            persconc..personal.concerns..leisure..leisure. + 
+            persconc..personal.concerns..home..home. + 
+            persconc..personal.concerns..money..money. + 
+            persconc..personal.concerns..relig..religion. + 
+            persconc..personal.concerns..death..death. + 
+            informal..informal.language..swear..swear. + 
+            informal..informal.language..netspeak..netspeak. + 
+            informal..informal.language..assent..assent. + 
+            informal..informal.language..nonflu..nonfluencies. + 
+            informal..informal.language..filler..filler.words.)
+stepC<-stepAIC(fullC, direction = "both", trace = FALSE)
+FmlaC<- stepC$call$formula
+
+BestC<-lm(data=Output, FmlaC) %>%
+  lm.beta() %>% summary.lm.beta() 
+
+BestC$coefficients %>%
+  as.data.frame() %>% 
+  mutate(names = row.names(.)) %>%
+  dplyr::filter(abs(Standardized) >= .1) %>% 
+  dplyr::select(names) %>% unlist() %>%
+  paste("alt_Conf ~", ., collapse = "+")  -> Best_C_Res
+
+Best_FitC<-lm(data=Output, formula = alt_Conf ~ affect..affect..posemo..positive.emotions.+
+                cogproc..cognitive.processes..insight..insight.+
+                drives..drives..achieve..achievement.+
+                timeorient..time.orientation..focuspresent..present.focus.+
+                persconc..personal.concerns..home..home.+
+                informal..informal.language..assent..assent.)
+
+
+
+fullH<-lm(data=Output, alt_Dehum ~ affect..affect..posemo..positive.emotions. +
+            affect..affect..negemo..negative.emotions..anx..anx. +
+            affect..affect..negemo..negative.emotions..anger..anger. +
+            affect..affect..negemo..negative.emotions..sad..sad. + 
+            social..social..family..family. + 
+            social..social..friend..friends. + 
+            social..social..female..female. + 
+            social..social..male..male. + 
+            cogproc..cognitive.processes..insight..insight. + 
+            cogproc..cognitive.processes..cause..causal. +
+            cogproc..cognitive.processes..discrep..discrepancies. + 
+            cogproc..cognitive.processes..tentat..tentative. + 
+            cogproc..cognitive.processes..certain..certainty. +
+            cogproc..cognitive.processes..differ..differentiation. + 
+            percept..perceptual.processes..see..see. + 
+            percept..perceptual.processes..hear..hear. + 
+            percept..perceptual.processes..feel..feel. + 
+            bio..biological.processes..body..body. + 
+            bio..biological.processes..health..health. + 
+            bio..biological.processes..sexual..sexual. + 
+            bio..biological.processes..ingest..ingest. + 
+            drives..drives..affiliation..affiliation. + 
+            drives..drives..achieve..achievement. + 
+            drives..drives..power..power. + 
+            drives..drives..reward..reward. + 
+            drives..drives..risk..risk. + 
+            timeorient..time.orientation..focuspast..past.focus. + 
+            timeorient..time.orientation..focuspresent..present.focus. + 
+            timeorient..time.orientation..focusfuture..future.focus. + 
+            relativ..relativity..motion..motion. + 
+            relativ..relativity..space..space. + 
+            relativ..relativity..time..time. + 
+            persconc..personal.concerns..work..work. + 
+            persconc..personal.concerns..leisure..leisure. + 
+            persconc..personal.concerns..home..home. + 
+            persconc..personal.concerns..money..money. + 
+            persconc..personal.concerns..relig..religion. + 
+            persconc..personal.concerns..death..death. + 
+            informal..informal.language..swear..swear. + 
+            informal..informal.language..netspeak..netspeak. + 
+            informal..informal.language..assent..assent. + 
+            informal..informal.language..nonflu..nonfluencies. + 
+            informal..informal.language..filler..filler.words.)
+
+stepH<-stepAIC(fullH, direction = "both", trace = FALSE)
+FmlaH<- stepH$call$formula
+
+BestH<-lm(data=Output, FmlaH) %>%
+  lm.beta() %>% summary.lm.beta() 
+
+BestH$coefficients %>%
+  as.data.frame() %>% 
+  mutate(names = row.names(.)) %>%
+  dplyr::filter(abs(Standardized) >= .1) %>% 
+  dplyr::select(names) %>% unlist() %>%
+  paste("alt_Dehum ~", ., collapse = "+")  -> Best_H_Res
+
+Best_FitH<-lm(data=Output, formula = alt_Dehum ~ social..social..friend..friends.+
+                bio..biological.processes..health..health.+
+                drives..drives..achieve..achievement.+
+                drives..drives..reward..reward.+
+                timeorient..time.orientation..focuspresent..present.focus.+
+                informal..informal.language..assent..assent.)
+
+
+Terms<-c("Negative Affect: Sadness", "Social: Friends", "Biological: Health", "Positive Affect", "Social: Female",
+"Cognitive: Insight", "Drives: Achievement", "Drives: Reward", "Cognitive: Causal", "Drive: Affiliation", "Time Orientation: Present", "Concerns: Home", "Informal Language: Assent")
+
+library(stargazer)
+
+stargazer(Best_FitH, Best_FitC, Best_FitR,type = "html", dep.var.labels = c("Mind","Conflict", "Responsiveness"), dep.var.caption = "Attributes perceived by partner", initial.zero = FALSE,single.row = TRUE, header = TRUE, title = "Regressions: best models of words predicting partner perception", covariate.labels = Terms, digits = 2, model.numbers = FALSE, no.space = TRUE, align = TRUE, notes.align = "c", star.cutoffs = c(.05, .01, .001)) 
+
+
+```
+
+
+# Additional Analyses
+
+## Word Category Variations by Topics  
+These plots show all LIWC categories analyzed by Topic. In most of the categories there are no notable variations, except for some that show significant differences. Below the plots, we give some insights about those differences.  
+
+``` {r categories_by_topic, fig.align="center", fig.dim=c(12,12)}
+Output %>%
+  melt(id.vars = "Topic", measure.vars =c(22, 30:41, 43, 45:47, 49:52,54:59)) %>%
+  ggplot(aes(variable, value, fill = Topic)) + 
+  stat_summary( geom = "col", position = "dodge2") + 
+  stat_summary( geom = "errorbar", position = "dodge2") + coord_flip()
+  
+
+# Specific Categories 2/2
+Output %>%
+  melt(id.vars = "Topic", measure.vars =c(61:63,65:68,70:77,79:87, 89:93)) %>%
+  ggplot(aes(variable, value, fill = Topic)) + 
+  stat_summary( geom = "col", position = "dodge2") + 
+  stat_summary( geom = "errorbar", position = "dodge2") + coord_flip()
+
+```
+
+Some insights of more specific analyses:
+
+* Differences in Drive words = Power words  for *reparations*.
+* Differences in Bio words = health-related word in *drugs* (i.e,pain).
+* Differences in Perceptual words = hearing-related words in *speakers* (i.e. speaker, list, hush, sound, yelling)
+* Differences in Social words = male-related words in *speakers* (e.g., he, guy ) and  family-related in reparations (e.g., grandsons, relatives, folks).
+* Differences in Affective words = anger-related words in *speakers* (e.g., asshole, jerk, intimidation, mean, threat)
+* Differences in Function words: small and hard to interpret:
+  + more pronouns but less adjectives, comparisons, quantifiers  in *speakers*
+  + more auxiliary verbs in *drugs*, and *reparations* more than *speakers*
+  + less conjunctions in *reparations*
+
+## Keywords in context (KWIC) analysis
+Sample of keywords related to **Insight** cognitive processes.
+``` {r KWIC_1}
+library(quanteda)
+LIWC_dic <-dictionary(file = "LIWC2015_English.dic")
+Insight_context<-kwic(Huge$Text, LIWC_dic[["cogproc (Cognitive Processes)"]][["insight (Insight)"]] ) 
+head(Insight_context, 15)  %>% kable() %>% kable_styling(full_width = TRUE )
+```
+
+   
+Sample of keywords related to **Time Orientation - Present**.
+``` {r KWIC_2}
+Present_context<-kwic(Huge$Text, LIWC_dic[["timeorient (Time Orientation)"]][["focuspresent (Present Focus)"]])
+head(Present_context, 15) %>% kable() %>% kable_styling(full_width = TRUE)
+```
+
+**Comment:** Both categories deal with extremely common expressions; so it's hard to interpret what that could mean in terms of difference between conditions or potential mediational effects. Also, just as assent words, it could be a confound of spoken conversation.
+
+## More Word Categories: Morality and Politeness
+
+### Morality (by Moral Foundations Dictionary)
+``` {r MFD, fig.align="center", fig.dim=c(12,12)}
+load("MFD.Rdata")
+library(ggradar)
+
+Output_MFD %>%
+  mutate( Care = care.virtue+care.vice,
+          Fairness = fairness.virtue+fairness.vice,
+          Loyalty = loyalty.virtue+loyalty.vice,
+          Authority = authority.virtue+authority.vice,
+          Sanctity = sanctity.virtue+sanctity.vice) %>%
+  group_by(Topic) %>%
+  summarize (Care = mean(Care),
+             Fairness = mean(Fairness),
+             Loyalty = mean(Loyalty),
+             Authority = mean(Authority),
+             Sanctity = mean(Sanctity)) %>%
+  ggradar(grid.max = 3,  group.line.width = 1, group.point.size = .6, axis.label.size = 5) + 
+    labs(title = "Moral Concerns by Topic")
+
+
+Output_MFD %>%
+  mutate( Care = care.virtue+care.vice,
+          Fairness = fairness.virtue+fairness.vice,
+          Loyalty = loyalty.virtue+loyalty.vice,
+          Authority = authority.virtue+authority.vice,
+          Sanctity = sanctity.virtue+sanctity.vice,
+          Medium = if_else(Medium ==0, "Text", "Audio") ) %>%
+  group_by(Medium) %>%
+  summarize (Care = mean(Care),
+             Fairness = mean(Fairness),
+             Loyalty = mean(Loyalty),
+             Authority = mean(Authority),
+             Sanctity = mean(Sanctity)) %>%
+  ggradar(grid.max = 1.5,group.line.width = 1, group.point.size = .6, axis.label.size = 5) + 
+  labs(title = "Moral Concerns by Medium")
+
+
+```
+
+**Comment**: In the Drug topic `Sanctity` is more salient because of the words related to health. Similarly, words related to fairness - e.g., retribution, justice, inequality - are more salient in the Reparations topic. Now, we can see that text conversations were definitely more moralized than audio conversations, in all domains. It doesn't seem to be an interaction between medium and moral foundations - small differences between mediums in all foundatiosn (Cohen's d between .28 and .42).
+
+### Politeness (from Yeomans, Kantor & Tingley, 2018)
+
+```{r Politeness,  fig.align="center", fig.dim=c(12,12), }
+library(politeness)
+
+
+#Plotting proportion
+Pol1<-politeness(Huge$Text,  metric = "average", drop_blank = TRUE)
+Pol1<-cbind(Pol1, Huge$Medium, Huge$Extension, Huge$Topic, Huge$alt_Conf, Huge$alt_Dehum, Huge$alt_Resp)
+names(Pol1)[30:35]<-c("Medium", "Extension", "Topic", "Conf", "Mind", "Resp")
+Pol1 %>%
+  melt(id.vars = "Medium", measure.vars = c(2,3,4,17,21,23:29)) %>%
+  ggplot(aes(variable, value, fill= Medium)) + 
+           stat_summary(geom = "col", position = position_dodge2(width = .6))+
+           stat_summary(geom = "errorbar",position = position_dodge2(width = .6)) +
+  coord_flip() + labs(title = "Proportion of Politeness Terms", 
+                      subtitle= "by Medium", y = "Percentage over total WC") +theme(axis.text.x = element_text( 
+                           size=18))
+
+#Plotting presence
+Pol2<-politeness(Huge$Text,  metric = "binary", drop_blank = TRUE)
+Pol2<-cbind(Pol2, Huge$Medium, Huge$Extension, Huge$Topic, Huge$alt_Conf, Huge$alt_Dehum, Huge$alt_Resp)
+names(Pol2)[30:35]<-c("Medium", "Extension", "Topic", "Conf", "Mind", "Resp")
+
+Pol2 %>%
+  melt(id.vars = "Medium", measure.vars = c(2,3,4,17,21,23:29)) %>%
+  ggplot(aes(variable, value, color= Medium)) + 
+  stat_summary(geom = "point", size = 3)+
+  stat_summary(geom = "errorbar", width = .6) +
+  coord_flip() + labs(title = "Presence of Politeness Terms", 
+                      subtitle = "by Medium", y = "Percentage of speakers using at least 1 term") +
+  theme(axis.text.x = element_text(size=18))
+
+# Correlation Plot (only of those politeness features where there was variance)
+library(ggcorrplot)
+library(psych)
+cormat<-round(cor(Pol1[,c(2,3,4,17,21,23:29, 33:35)]),3)
+pmat<-cor_pmat(Pol1[,c(2,3,4,17,21,23:29, 33:35)])
+
+ggcorrplot(cormat, type = "lower", p.mat = pmat, show.legend = TRUE, lab = TRUE, insig = "blank", lab_size = 5 )
+
+
+
+```
+**Note**: Some politeness terms were not plotted for not showing any differences among conditions.
+
+
+
+## Mediation Analyses
+
+### Separate Analyses
+We ran mediation analyses for the three partner attribution outcomes (Mind-like , Conflictive and Responsive). Four word categories were tested for mediation between Medium - Audio vs. Text - and outcomes: Assent words, Present-orientation words, Insight words, Moralized words and Politeness features. In the table below we listed the indirect effects of all mediators for all outcomes, run separately.
+
+``` {r mediations}
+load("Indirect.Rdata")
+
+kable(Indirect) %>% kable_styling()
+```
+
+
+### Complete Mediation Models
+
+Then, we ran full SEM introducing the four word categories as mediators for each one of the outcomes.
+
+#### Partner Humanization
+
+```{r full_SEM, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE,fig.align="center", fig.dim=c(16,12)}
+load("Meds.Rdata")
+
+All_Dehum<-'# direct effect
+            alt_Dehum ~ c*Medium
+            # mediator 1
+            Present ~ a_1*Medium
+            alt_Dehum ~ b_1*Present
+            # indirect effect_1 (a_1*b_1)
+            indirect_1 := a_1*b_1
+            # mediator 2
+            Insight ~ a_2*Medium
+            alt_Dehum ~ b_2*Insight
+            #indirect effect_2 (a_2*b_2)
+            indirect_2 := a_2*b_2
+            # mediator 3
+            Assent ~ a_3*Medium
+            alt_Dehum ~ b_3*Assent
+            #indirect effect_3 (a_3*b_3)
+            indirect_3 := a_3*b_3
+            # mediator 4
+            Moral ~ a_4*Medium
+            alt_Dehum ~ b_4*Moral
+            # indirect effect_4 (a_4*b_4)
+            indirect_4 := a_4*b_4
+            # mediator 5
+            Polite ~ a_5*Medium
+            alt_Dehum ~ b_5*Polite
+            # indirect effect_5 (a_5*b_5)
+            indirect_5 := a_5*b_5
+            # direct effect (c)
+            direct := c
+            # total effect
+            total := c + (a_1*b_1) + (a_2*b_2) + (a_3*b_3) + (a_4*b_4)+(a_5*b_5)'
+
+Fit_All_Hum<-sem(data=df_Meds, model = All_Dehum, estimator = "MLM")
+lay<-matrix(c(1, 0 , #dehum
+              0, -.15, #pres
+              0, .05, #insight
+              0, -.05, #Asnt
+              0, -.1, #Moral
+              0, .10, #Polite
+              -1, 0) # Medium)
+            , ncol = 2, byrow =TRUE)
+Hum_labs = c("Humanization", "Present", "Insight","Assent", "Moral","Polite", "Medium")
+
+
+semPaths(Fit_All_Hum, "par",, layout = lay, sizeMan2 = 8, 
+         sizeMan = 10, sizeInt = 12, edge.label.cex=1.2, style = "ram",
+         fade=FALSE, nodeLabels = Hum_labs, label.prop = c(1,1, .8, .8, .8, .8), residuals = FALSE)
+text(-.9,-.9,"Indirect effects: \n Insight: -.02 \n Present: -.016 
+      Assent: .07, \n Moral: .05, \n Polte: .02", cex = 2.5)
+```
+
+#### Partner perceived as Conflictive
+
+```{r full_SEM2, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE,fig.align="center", fig.dim=c(16,12)}
+
+All_Conf<-'# direct effect
+            alt_Conf ~ c*Medium
+            # mediator 1
+            Present ~ a_1*Medium
+            alt_Conf ~ b_1*Present
+            # indirect effect_1 (a_1*b_1)
+            indirect_1 := a_1*b_1
+            # mediator 2
+            Insight ~ a_2*Medium
+            alt_Conf ~ b_2*Insight
+            #indirect effect_2 (a_2*b_2)
+            indirect_2 := a_2*b_2
+            # mediator 3
+            Assent ~ a_3*Medium
+            alt_Conf ~ b_3*Assent
+            #indirect effect_3 (a_3*b_3)
+            indirect_3 := a_3*b_3
+            # mediator 4
+            Moral ~ a_4*Medium
+            alt_Conf ~ b_4*Moral
+            # indirect effect_4 (a_4*b_4)
+            indirect_4 := a_4*b_4
+            # mediator 5
+            Polite ~ a_5*Medium
+            alt_Conf ~ b_5*Polite
+            # indirect effect_5 (a_5*b_5)
+            indirect_5 := a_5*b_5
+            # direct effect (c)
+            direct := c
+            # total effect
+            total := c + (a_1*b_1) + (a_2*b_2) + (a_3*b_3) + (a_4*b_4)+(a_5*b_5)'
+Fit_All_Conf<-sem(data=df_Meds, model = All_Conf, estimator = "MLM")
+
+Conf_labs = c("Conflictive", "Present", "Insight","Assent", "Moral", "Polite", "Medium")
+
+semPaths(Fit_All_Conf, "par",, layout = lay, sizeMan2 = 8, 
+         sizeMan = 10, sizeInt = 12, edge.label.cex=1.2, style = "ram",
+         fade=FALSE, nodeLabels = Conf_labs, label.prop = c(1,1, .8, .8, .8, .8), residuals = FALSE)
+text(-.9, -.9, "Indirect effects: \n Insight: .04 \n Present: .04 \n 
+     Assent: -.295***,\n Moral: -.10*, \n Polite = -.08*", cex = 2.5)
+```
+
+#### Partner perceived as Responsive
+
+```{r full_SEM3, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE,fig.align="center", fig.dim=c(16,12)}
+
+All_Resp<-'# direct effect
+            alt_Resp ~ c*Medium
+            # mediator 1
+            Present ~ a_1*Medium
+            alt_Resp ~ b_1*Present
+            # indirect effect_1 (a_1*b_1)
+            indirect_1 := a_1*b_1
+            # mediator 2
+            Insight ~ a_2*Medium
+            alt_Resp ~ b_2*Insight
+            #indirect effect_2 (a_2*b_2)
+            indirect_2 := a_2*b_2
+            # mediator 3
+            Assent ~ a_3*Medium
+            alt_Resp ~ b_3*Assent
+            #indirect effect_3 (a_3*b_3)
+            indirect_3 := a_3*b_3
+            # mediator 4
+            Moral ~ a_4*Medium
+            alt_Resp ~ b_4*Moral
+            # indirect effect_4 (a_4*b_4)
+            indirect_4 := a_4*b_4
+            # mediator 5
+            Polite ~ a_5*Medium
+            alt_Resp ~ b_5*Polite
+            # indirect effect_5 (a_5*b_5)
+            indirect_5 := a_5*b_5
+            # direct effect (c)
+            direct := c
+            # total effect
+            total := c + (a_1*b_1) + (a_2*b_2) + (a_3*b_3) + (a_4*b_4)+(a_5*b_5)'
+Fit_All_Resp<-sem(data=df_Meds, model = All_Resp, estimator = "MLM")
+
+Resp_labs  = c("Responsiveness", "Present", "Insight","Assent","Moral", "Polite", "Medium ")
+
+semPaths(Fit_All_Resp, "par",, layout = lay, sizeMan2 = 8, 
+         sizeMan = 10, sizeInt = 12, edge.label.cex=1.2, style = "ram",
+         fade=FALSE, nodeLabels = Resp_labs, label.prop = c(1,1, .8, .8, .8, .8), residuals = FALSE)
+text(-.9, -.9, "Indirect effects: \n Insight: .-02 \n Present: -.05* \n 
+     Assent: -.24*** \n Moral: -.09 \n Polite: -.02", cex = 2.5)
+
+```
