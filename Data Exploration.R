@@ -1904,6 +1904,95 @@ unique(names(unlist(lapply(list(Reg1, Reg2, Reg3), coef))))
 #                     "Cognitive: Tentative talk", "Perception: Hear", "Biological terms: Body", "Biological terms: Health",
 #                     "Time Focus: Present", "Relative: Motion terms", "Concerns: Home", "Concerns: Money", "Concerns:Death",
 #                     "Informal: Swear", "Drives: Affiliation", "Drives: Achievement", "Drives: Reward", "Time Focus: Past",
->>>>>>> 6eddc7b7a6219867d7a5dbf408dd7f0526475f48
+
 #                     "Concerns: Religion", "Informal: Netspeak", "Informal: Assent", "Informal: filler words", "Informal:nonfluencies")
->>>>>>> a72c413d86e10d328408ad40f734bdf88f2b1c18
+
+
+##Politeness Analyses####
+
+library(politeness)
+library(spacyr)
+spacy_initialize(python_executable = "C:\\Python34\\python.exe")
+
+#Plotting proportion
+Pol1<-politeness(Huge$Text,  metric = "average", drop_blank = TRUE)
+Pol1<-cbind(Pol1, Huge$Medium, Huge$Extension, Huge$Topic, Huge$alt_Conf, Huge$alt_Dehum, Huge$alt_Resp)
+names(Pol1)[30:35]<-c("Medium", "Extension", "Topic", "Conf", "Mind", "Resp")
+Pol1 %>%
+  melt(id.vars = "Medium", measure.vars = c(2,3,4,17,21,23:29)) %>%
+  ggplot(aes(variable, value, fill= Medium)) + 
+           stat_summary(geom = "col", position = position_dodge2(width = .6))+
+           stat_summary(geom = "errorbar",position = position_dodge2(width = .6)) +
+  coord_flip() + labs(title = "Proportion of Politeness Terms", 
+                      subtitle= "by Medium", y = "Percentage over total WC")
+
+#Plotting presence
+Pol2<-politeness(Huge$Text,  metric = "binary", drop_blank = TRUE)
+Pol2<-cbind(Pol2, Huge$Medium, Huge$Extension, Huge$Topic, Huge$alt_Conf, Huge$alt_Dehum, Huge$alt_Resp)
+names(Pol2)[30:35]<-c("Medium", "Extension", "Topic", "Conf", "Mind", "Resp")
+Pol2 %>%
+  melt(id.vars = "Medium", measure.vars = 1:29) %>%
+  ggplot(aes(variable, value, color= Medium)) + 
+  stat_summary(geom = "point")+
+  stat_summary(geom = "errorbar", width = .6) +
+  coord_flip() + labs(title = "Presence of Politeness Terms", 
+                      subtitle = "by Medium", y = "Percentage of speakers using at least 1 term")
+
+# Correlation Plot (only of those politeness features where there was variance)
+library(ggcorrplot)
+library(psych)
+cormat<-round(cor(Pol1[,c(2,3,4,17,21,23:29, 33:35)]),3)
+pmat<-cor_pmat(Pol1[,c(2,3,4,17,21,23:29, 33:35)])
+
+ggcorrplot(cormat, type = "lower", p.mat = pmat, show.legend = TRUE, lab = TRUE, insig = "blank", lab_size = 2.5 )
+
+
+Pol1<-cbind(Pol1, Pol_Avg = 100*rowMeans(Pol1[,1:29]))
+
+Pol_Hum<- '# direct effect
+            Mind ~ c*Medium
+            # mediator 
+            Pol_Avg ~ a*Medium
+            Mind ~ b *Pol_Avg
+            # indirect effect (a*b)
+            indirect := a *b 
+            # direct effect (c)
+            direct := c
+            # total effect
+            total := c + (a *b)'
+
+Pol_Conf<- '# direct effect  
+            Conf ~ c*Medium
+            # mediator 
+            Pol_Avg ~ a*Medium
+            Conf ~ b *Pol_Avg
+            # indirect effect (a*b)
+            indirect := a *b 
+            # direct effect (c)
+            direct := c
+            # total effect 
+            total := c + (a *b)'
+
+
+Pol_Resp<- '# direct effect  
+            Resp ~ c*Medium
+            # mediator 
+            Pol_Avg ~ a*Medium
+            Resp ~ b *Pol_Avg
+            # indirect effect (a*b)
+            indirect := a *b 
+            # direct effect (c)
+            direct := c
+            # total effect 
+            total := c + (a *b)'
+
+library(lavaan)
+
+Fit_Pol_Hum<-sem(data=Pol1,model = Pol_Hum)
+Fit_Pol_Conf<-sem(data=Pol1,model = Pol_Conf)
+Fit_Pol_Resp<-sem(data=Pol1,model = Pol_Resp)
+
+Indirect[5,2:4]<-c(round(Fit_Pol_Hum@ParTable$est[7],3),
+                   paste(round(Fit_Pol_Conf@ParTable$est[7],3), "*", sep = ""), 
+                   paste(round(Fit_Pol_Resp@ParTable$est[7],3),"*", sep = ""))
+save(Indirect, file = "Indirect.Rdata")
