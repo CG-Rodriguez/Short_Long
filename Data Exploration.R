@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 ################################################################
 ######################## DATA STRUCTURE ########################
 ################################################################
@@ -1309,7 +1308,7 @@ save(Indirect, file = "Indirect.Rdata")
 ##- re-run regression by topics
 
 
-<<<<<<< HEAD
+
 =======
 #Terms<-c("Negative Affect: Anxiety", "Negative Affect: Anger", "Negative Affect: Sadness",
 #                     "Social words: Friends", "Social words: female", "Positive Affect", "Cognitive: Insight",
@@ -1317,7 +1316,6 @@ save(Indirect, file = "Indirect.Rdata")
 #                     "Cognitive: Tentative talk", "Perception: Hear", "Biological terms: Body", "Biological terms: Health",
 #                     "Time Focus: Present", "Relative: Motion terms", "Concerns: Home", "Concerns: Money", "Concerns:Death",
 #                     "Informal: Swear", "Drives: Affiliation", "Drives: Achievement", "Drives: Reward", "Time Focus: Past",
-=======
 ################################################################
 ######################## DATA STRUCTURE ########################
 ################################################################
@@ -1654,8 +1652,8 @@ I<-ggplot(Output) +
 
 library(ggpubr)
 ggarrange(A, B, C, D, E, F, G, H, I, legend = "bottom", common.legend = TRUE, nrow = 3, ncol = 3)
-
-
+save(Output_MFD, file = "MFD.Rdata")
+save(Indirect, file = "Indirect.Rdata")
 
 
 
@@ -1995,4 +1993,12 @@ Fit_Pol_Resp<-sem(data=Pol1,model = Pol_Resp)
 Indirect[5,2:4]<-c(round(Fit_Pol_Hum@ParTable$est[7],3),
                    paste(round(Fit_Pol_Conf@ParTable$est[7],3), "*", sep = ""), 
                    paste(round(Fit_Pol_Resp@ParTable$est[7],3),"*", sep = ""))
+
+save(Indirect, file = "Indirect.Rdata")
+
+
+
+load("Meds.Rdata")
+df_Meds$Polite<-Pol1$Pol_Avg*100
+save(df_Meds, file = "Meds.Rdata")
 save(Indirect, file = "Indirect.Rdata")
