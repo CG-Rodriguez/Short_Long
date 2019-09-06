@@ -1,0 +1,19 @@
+---
+title: "Preliminary Text-Analyses"
+author: "Cristian Rodriguez"
+date: "8/8/2019"
+left:
+  - text: "Home"
+    href: index.html
+  - text: "Preliminary"
+    href: Prelim.html
+output: 
+  html_document: 
+    toc: true
+    toc_depth: 4
+    toc_float:
+      collapsed: false
+      
+  
+
+---
