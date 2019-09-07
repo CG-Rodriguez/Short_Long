@@ -2,6 +2,7 @@
 title: "Preliminary Text-Analyses"
 author: "Cristian Rodriguez"
 date: "8/8/2019"
+
 knit: (function(input_file, encoding) {
   out_dir <- 'docs';
   rmarkdown::render(input_file,
@@ -625,6 +626,7 @@ Pol2 %>%
   stat_summary(geom = "point", size = 3)+
   stat_summary(geom = "errorbar", width = .6) +
   coord_flip() + labs(title = "Presence of Politeness Terms", 
+
                       subtitle = "by Medium", y = "Percentage of speakers using at least 1 term") +
   theme(axis.text.x = element_text(size=18))
 
