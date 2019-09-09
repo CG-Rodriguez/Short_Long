@@ -2,6 +2,8 @@ library(tidyverse)
 library(reshape)
 library(sjstats)
 
+load("~/GitHub/Short_Long/Output.Rdata")
+
 ### Analyses based on Agreement ####
 
 #Agreement Outcomes
@@ -10,7 +12,8 @@ library(sjstats)
 # Approach: pair-level measure of how the reported issue attitudes got closer after the convo ==> (Attitude pre [subjA] - Attitude pre [subj B]) -  (Attitude post [subjA] - Attitude post [subj B])
 
 data_Ag<-Output %>%
-  mutate(Dich_Agree = if_else(Agreed == 0, "Agreed", "Disagreed"),
+  mutate(Agreed = if_else(Agreed == 0, 1, 0),
+         Dich_Agree = if_else(Agreed == 0, "Disagreed", "Agreed"),
          Ev_Agree = Att_Change,
          Att_Change = Real_Change)
 
@@ -28,12 +31,31 @@ for (i in 1:nrow(data_Ag)){
 
 ### Exploratory plots and analyses ####
 data_Ag %>%
-  group_by(Medium) %>%
+  group_by(Dich_Agree) %>%
   summarise(mean(Ev_Agree), mean(Approach))
 
+means<-data_Ag %>%
+  group_by(Dich_Agree)%>%
+  summarize(mean(Approach))
+
+
 data_Ag %>%
-  melt(id.vars = "Medium", measure.vars =  "Approach") %>%
-  ggplot(aes(value, color = Medium)) + geom_freqpoly(binwidth = 1)
+  mutate(Approach = as.factor(Approach)) %>%
+  melt(id.vars = "Dich_Agree", measure.vars =  "Approach") %>%
+  ggplot(aes(value, fill = Dich_Agree)) + geom_bar(stat = "count", position = "dodge") +
+  labs(title = "Approach estimates, by Perceived Agreement", y = "Approach", fill = "Perceived Agreement")
+  
+
+data_Ag %>%
+  mutate(Approach = factor(Approach, labels = -2:4)) %>%
+  ggplot(aes(fill = Approach))+
+  geom_bar(aes(x = Topic), position = "dodge") + 
+  geom_bar(aes(x = Medium), position = "dodge") + 
+  geom_bar(aes(x = Extension), position = "dodge")+ 
+  scale_fill_brewer(palette = 'Blues' ) + 
+  scale_x_discrete(limits = c("Audio", "Text", "Short", "Long", "Drugs", "Reparations", "Speakers"))+
+labs(title = "Approach estimates, by Conditions", y = "Proportion", fill = "Approach", 
+     x = "Medium                    Extension                                  Topic       ")
 
 
 data_Ag %>%
@@ -56,6 +78,7 @@ ggplot(data_Ag, aes(Ev_Agree, alt_Resp, color = Medium)) + geom_point(position =
 ggplot(data_Ag, aes(Approach, alt_Dehum, color = Medium)) + geom_point(position = "jitter")+ geom_smooth(method = "lm")
 ggplot(data_Ag, aes(Approach, alt_Conf, color = Medium)) + geom_point(position = "jitter") + geom_smooth(method = "lm")
 ggplot(data_Ag, aes(Approach, alt_Resp, color = Medium)) + geom_point(position = "jitter") + geom_smooth(method = "lm")
+
 
 
 ### Dataset by pairs ####
@@ -83,7 +106,19 @@ for (i in 1:nrow(data_Ag)){
 
 
 ### Regressions ####
+library(lme4)
+Mixed<-glmer(data=data_Ag, Agreed ~ function..function.words. + affect..affect. + social..social. + 
+              cogproc..cognitive.processes. + bio..biological.processes. + drives..drives. + relativ..relativity. +
+              informal..informal.language. + Topic + (1 | Pair), 
+             family = binomial)
 
+se <- sqrt(diag(vcov(Mixed)))
+
+ORs_CI <- cbind(Est = fixef(Mixed), 
+              LL = fixef(Mixed) - 1.96 * se, 
+              UL = fixef(Mixed) + 1.96 * se) %>%
+   exp() %>% round(2) %>% as_tibble() %>%
+  mutate(sig = c("", "", "", "", "", "**", "+", "", "**", "", "")) 
 
 Mixed<-lmer(data=data_Ag, Ev_Agree ~ function..function.words. + affect..affect. + social..social. + 
               cogproc..cognitive.processes. + bio..biological.processes. + drives..drives. + relativ..relativity. +
