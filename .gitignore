@@ -1,9 +1,9 @@
-<<<<<<< HEAD
+
 .Rproj.user
 .Rhistory
 .RData
 .Ruserdata
-=======
+
 # History files
 .Rhistory
 .Rapp.history
@@ -40,4 +40,3 @@ vignettes/*.pdf
 
 # Shiny token, see https://shiny.rstudio.com/articles/shinyapps.html
 rsconnect/
->>>>>>> 6eddc7b7a6219867d7a5dbf408dd7f0526475f48

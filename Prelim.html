@@ -1,0 +1,3691 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Cristian Rodriguez" />
+
+
+<title>Preliminary Text-Analyses</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Preliminary Text-Analyses</h1>
+<h4 class="author">Cristian Rodriguez</h4>
+<h4 class="date">8/8/2019</h4>
+
+</div>
+
+
+<div id="data-structuring" class="section level1">
+<h1>Data Structuring</h1>
+<p>The transcriptions were processed by separating each line of text, labeling pair, participant, topic, extension and medium. Different data structures were produced (word-level, intervention-level, person-level, pair-level, condition-level). For these results, all participant interventions were grouped and analyzed with the <code>liwc_alike()</code> function of the <code>quanteda</code> package. The word categories are identical to those from the LIWC software. Additionally, output scores (how responsive was your partner, how conflicted was the conversation, “how much mind” does your partner have) were appended for each participant, as well as the scores given by the conversation partner. Variables labeled as <code>alt_</code> indicate partner perception.</p>
+</div>
+<div id="descriptives" class="section level1">
+<h1>Descriptives</h1>
+<table>
+<colgroup>
+<col width="3%" />
+<col width="26%" />
+<col width="20%" />
+<col width="17%" />
+<col width="32%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">No</th>
+<th align="left">Variable</th>
+<th align="left">Stats / Values</th>
+<th align="left">Freqs (% of Valid)</th>
+<th align="left">Graph</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">1</td>
+<td align="left">Medium<br />
+[character]</td>
+<td align="left">1. Audio<br />
+2. Text</td>
+<td align="left">202 (49.8%)<br />
+204 (50.2%)</td>
+<td align="left">IIIIIIIII<br />
+IIIIIIIIII</td>
+</tr>
+<tr class="even">
+<td align="left">2</td>
+<td align="left">Extension<br />
+[character]</td>
+<td align="left">1. Long<br />
+2. Short</td>
+<td align="left">206 (50.7%)<br />
+200 (49.3%)</td>
+<td align="left">IIIIIIIIII<br />
+IIIIIIIII</td>
+</tr>
+<tr class="odd">
+<td align="left">3</td>
+<td align="left">Dehum<br />
+[numeric]</td>
+<td align="left">Mean (sd) : 5.4 (0.9)<br />
+min &lt; med &lt; max:<br />
+2.7 &lt; 5.5 &lt; 6.9<br />
+IQR (CV) : 1.3 (0.2)</td>
+<td align="left">46 distinct values</td>
+<td align="left"><br />
+            :<br />
+        . . : :<br />
+        : : : : :<br />
+    . : : : : : :<br />
+  . : : : : : : :</td>
+</tr>
+<tr class="even">
+<td align="left">4</td>
+<td align="left">Conflict<br />
+[numeric]</td>
+<td align="left">Mean (sd) : 1.6 (1.2)<br />
+min &lt; med &lt; max:<br />
+0 &lt; 1.5 &lt; 5.5<br />
+IQR (CV) : 2 (0.7)</td>
+<td align="left">22 distinct values</td>
+<td align="left"><br />
+:<br />
+:<br />
+: : . : :<br />
+: : : : : .<br />
+: : : : : : : .</td>
+</tr>
+<tr class="odd">
+<td align="left">5</td>
+<td align="left">Respons<br />
+[numeric]</td>
+<td align="left">Mean (sd) : 4.5 (1.1)<br />
+min &lt; med &lt; max:<br />
+0.8 &lt; 4.8 &lt; 6<br />
+IQR (CV) : 1.2 (0.2)</td>
+<td align="left">22 distinct values</td>
+<td align="left"><br />
+                  :<br />
+              . : :<br />
+            : : : :<br />
+        . : : : : :<br />
+  . . : : : : : : :</td>
+</tr>
+<tr class="even">
+<td align="left">6</td>
+<td align="left">alt_Dehum<br />
+[numeric]</td>
+<td align="left">Mean (sd) : 5.4 (0.9)<br />
+min &lt; med &lt; max:<br />
+2.7 &lt; 5.5 &lt; 6.9<br />
+IQR (CV) : 1.3 (0.2)</td>
+<td align="left">46 distinct values</td>
+<td align="left"><br />
+            :<br />
+        . . : :<br />
+        : : : : :<br />
+    . : : : : : :<br />
+  . : : : : : : :</td>
+</tr>
+<tr class="odd">
+<td align="left">7</td>
+<td align="left">alt_Conf<br />
+[numeric]</td>
+<td align="left">Mean (sd) : 1.6 (1.2)<br />
+min &lt; med &lt; max:<br />
+0 &lt; 1.5 &lt; 5.5<br />
+IQR (CV) : 2 (0.7)</td>
+<td align="left">22 distinct values</td>
+<td align="left"><br />
+:<br />
+:<br />
+: : . : :<br />
+: : : : : .<br />
+: : : : : : : .</td>
+</tr>
+<tr class="even">
+<td align="left">8</td>
+<td align="left">alt_Resp<br />
+[numeric]</td>
+<td align="left">Mean (sd) : 4.5 (1.1)<br />
+min &lt; med &lt; max:<br />
+0.8 &lt; 4.8 &lt; 6<br />
+IQR (CV) : 1.2 (0.2)</td>
+<td align="left">22 distinct values</td>
+<td align="left"><br />
+                  :<br />
+              . : :<br />
+            : : : :<br />
+        . : : : : :<br />
+  . . : : : : : : :</td>
+</tr>
+<tr class="odd">
+<td align="left">9</td>
+<td align="left">function..function.words.<br />
+[numeric]</td>
+<td align="left">Mean (sd) : 50.3 (4)<br />
+min &lt; med &lt; max:<br />
+34.7 &lt; 50.2 &lt; 62.9<br />
+IQR (CV) : 5.2 (0.1)</td>
+<td align="left">337 distinct values</td>
+<td align="left"><br />
+      : :<br />
+      : :<br />
+      : :<br />
+      : : .<br />
+    : : : :</td>
+</tr>
+<tr class="even">
+<td align="left">10</td>
+<td align="left">affect..affect.<br />
+[numeric]</td>
+<td align="left">Mean (sd) : 6 (1.8)<br />
+min &lt; med &lt; max:<br />
+1.6 &lt; 5.8 &lt; 14.6<br />
+IQR (CV) : 2.1 (0.3)</td>
+<td align="left">285 distinct values</td>
+<td align="left"><br />
+      :<br />
+    : :<br />
+    : : .<br />
+  : : : :<br />
+. : : : : : .</td>
+</tr>
+<tr class="odd">
+<td align="left">11</td>
+<td align="left">social..social.<br />
+[numeric]</td>
+<td align="left">Mean (sd) : 8.3 (2.8)<br />
+min &lt; med &lt; max:<br />
+1.8 &lt; 7.9 &lt; 23.1<br />
+IQR (CV) : 3.1 (0.3)</td>
+<td align="left">323 distinct values</td>
+<td align="left"><br />
+    :<br />
+    : :<br />
+  . : :<br />
+  : : : .<br />
+  : : : : .</td>
+</tr>
+<tr class="even">
+<td align="left">12</td>
+<td align="left">cogproc..cognitive.processes.<br />
+[numeric]</td>
+<td align="left">Mean (sd) : 15.1 (3.1)<br />
+min &lt; med &lt; max:<br />
+0 &lt; 15.1 &lt; 25.4<br />
+IQR (CV) : 3.8 (0.2)</td>
+<td align="left">345 distinct values</td>
+<td align="left"><br />
+          : :<br />
+          : :<br />
+        . : :<br />
+        : : : :<br />
+      . : : : : .</td>
+</tr>
+<tr class="odd">
+<td align="left">13</td>
+<td align="left">percept..perceptual.processes.<br />
+[numeric]</td>
+<td align="left">Mean (sd) : 2.3 (1.6)<br />
+min &lt; med &lt; max:<br />
+0 &lt; 2 &lt; 9.7<br />
+IQR (CV) : 1.9 (0.7)</td>
+<td align="left">274 distinct values</td>
+<td align="left"><br />
+  :<br />
+  : :<br />
+: : : .<br />
+: : : :<br />
+: : : : : . .</td>
+</tr>
+<tr class="even">
+<td align="left">14</td>
+<td align="left">bio..biological.processes.<br />
+[numeric]</td>
+<td align="left">Mean (sd) : 1.7 (2)<br />
+min &lt; med &lt; max:<br />
+0 &lt; 0.7 &lt; 9.8<br />
+IQR (CV) : 2.5 (1.2)</td>
+<td align="left">218 distinct values</td>
+<td align="left"><br />
+:<br />
+:<br />
+:<br />
+:<br />
+: : : . . .</td>
+</tr>
+<tr class="odd">
+<td align="left">15</td>
+<td align="left">drives..drives.<br />
+[numeric]</td>
+<td align="left">Mean (sd) : 6.5 (2.3)<br />
+min &lt; med &lt; max:<br />
+0 &lt; 6.1 &lt; 20.6<br />
+IQR (CV) : 2.7 (0.4)</td>
+<td align="left">313 distinct values</td>
+<td align="left"><br />
+    :<br />
+    : :<br />
+    : :<br />
+  . : : .<br />
+  : : : : .</td>
+</tr>
+<tr class="even">
+<td align="left">16</td>
+<td align="left">relativ..relativity.<br />
+[numeric]</td>
+<td align="left">Mean (sd) : 8.2 (2.2)<br />
+min &lt; med &lt; max:<br />
+2.6 &lt; 8 &lt; 14.7<br />
+IQR (CV) : 2.6 (0.3)</td>
+<td align="left">306 distinct values</td>
+<td align="left"><br />
+      : :<br />
+      : : :<br />
+      : : :<br />
+    : : : : :<br />
+. : : : : : : : . .</td>
+</tr>
+<tr class="odd">
+<td align="left">17</td>
+<td align="left">informal..informal.language.<br />
+[numeric]</td>
+<td align="left">Mean (sd) : 2.7 (2.1)<br />
+min &lt; med &lt; max:<br />
+0 &lt; 2.1 &lt; 13.7<br />
+IQR (CV) : 2.7 (0.8)</td>
+<td align="left">279 distinct values</td>
+<td align="left"><br />
+: :<br />
+: :<br />
+: : :<br />
+: : : .<br />
+: : : : : .</td>
+</tr>
+</tbody>
+</table>
+<div id="by-medium" class="section level2">
+<h2>By Medium</h2>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+Word categories by Medium
+</caption>
+<thead>
+<tr>
+<th style="text-align:center;">
+Medium
+</th>
+<th style="text-align:center;">
+Mind
+</th>
+<th style="text-align:center;">
+Conflict
+</th>
+<th style="text-align:center;">
+Responsiveness
+</th>
+<th style="text-align:center;">
+Function
+</th>
+<th style="text-align:center;">
+Affective
+</th>
+<th style="text-align:center;">
+Social
+</th>
+<th style="text-align:center;">
+Cognitive
+</th>
+<th style="text-align:center;">
+Perceptual
+</th>
+<th style="text-align:center;">
+Biological
+</th>
+<th style="text-align:center;">
+Drives
+</th>
+<th style="text-align:center;">
+Orientation
+</th>
+<th style="text-align:center;">
+Informal
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+Audio
+</td>
+<td style="text-align:center;">
+5.62
+</td>
+<td style="text-align:center;">
+1.56
+</td>
+<td style="text-align:center;">
+4.7
+</td>
+<td style="text-align:center;">
+50.22
+</td>
+<td style="text-align:center;">
+5.56
+</td>
+<td style="text-align:center;">
+7.69
+</td>
+<td style="text-align:center;">
+14.79
+</td>
+<td style="text-align:center;">
+2.21
+</td>
+<td style="text-align:center;">
+1.38
+</td>
+<td style="text-align:center;">
+5.37
+</td>
+<td style="text-align:center;">
+8.06
+</td>
+<td style="text-align:center;">
+3.43
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Text
+</td>
+<td style="text-align:center;">
+5.27
+</td>
+<td style="text-align:center;">
+1.67
+</td>
+<td style="text-align:center;">
+4.3
+</td>
+<td style="text-align:center;">
+50.39
+</td>
+<td style="text-align:center;">
+6.35
+</td>
+<td style="text-align:center;">
+8.86
+</td>
+<td style="text-align:center;">
+15.41
+</td>
+<td style="text-align:center;">
+2.47
+</td>
+<td style="text-align:center;">
+2.03
+</td>
+<td style="text-align:center;">
+7.56
+</td>
+<td style="text-align:center;">
+8.32
+</td>
+<td style="text-align:center;">
+1.88
+</td>
+</tr>
+</tbody>
+</table>
+<img src="Prelim_files/figure-html/descriptives-1.png" width="672" />
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+Audio minus Text (Negative estimates indicate higher values for Text)
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Variable
+</th>
+<th style="text-align:right;">
+t.stat
+</th>
+<th style="text-align:right;">
+p.value
+</th>
+<th style="text-align:right;">
+LL
+</th>
+<th style="text-align:right;">
+UL
+</th>
+<th style="text-align:right;">
+Cohens.D
+</th>
+<th style="text-align:left;">
+Sig
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Mind - attributed by partner
+</td>
+<td style="text-align:right;">
+3.867
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.173
+</td>
+<td style="text-align:right;">
+0.530
+</td>
+<td style="text-align:right;">
+0.384
+</td>
+<td style="text-align:left;">
+***
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Conflict - attributed by partner
+</td>
+<td style="text-align:right;">
+-0.924
+</td>
+<td style="text-align:right;">
+0.356
+</td>
+<td style="text-align:right;">
+-0.343
+</td>
+<td style="text-align:right;">
+0.124
+</td>
+<td style="text-align:right;">
+-0.092
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Responsiveness - attributed by partner
+</td>
+<td style="text-align:right;">
+3.728
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.191
+</td>
+<td style="text-align:right;">
+0.617
+</td>
+<td style="text-align:right;">
+0.370
+</td>
+<td style="text-align:left;">
+***
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Function words
+</td>
+<td style="text-align:right;">
+-0.420
+</td>
+<td style="text-align:right;">
+0.675
+</td>
+<td style="text-align:right;">
+-0.958
+</td>
+<td style="text-align:right;">
+0.621
+</td>
+<td style="text-align:right;">
+-0.042
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Affective words
+</td>
+<td style="text-align:right;">
+-4.607
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+-1.119
+</td>
+<td style="text-align:right;">
+-0.449
+</td>
+<td style="text-align:right;">
+-0.457
+</td>
+<td style="text-align:left;">
+***
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Social words
+</td>
+<td style="text-align:right;">
+-4.298
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+-1.711
+</td>
+<td style="text-align:right;">
+-0.636
+</td>
+<td style="text-align:right;">
+-0.427
+</td>
+<td style="text-align:left;">
+***
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cognitive words
+</td>
+<td style="text-align:right;">
+-2.009
+</td>
+<td style="text-align:right;">
+0.045
+</td>
+<td style="text-align:right;">
+-1.214
+</td>
+<td style="text-align:right;">
+-0.013
+</td>
+<td style="text-align:right;">
+-0.199
+</td>
+<td style="text-align:left;">
+<ul>
+<li></td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Perceptual words
+</td>
+<td style="text-align:right;">
+-1.669
+</td>
+<td style="text-align:right;">
+0.096
+</td>
+<td style="text-align:right;">
+-0.576
+</td>
+<td style="text-align:right;">
+0.047
+</td>
+<td style="text-align:right;">
+-0.166
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Biological words
+</td>
+<td style="text-align:right;">
+-3.288
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+<td style="text-align:right;">
+-1.041
+</td>
+<td style="text-align:right;">
+-0.262
+</td>
+<td style="text-align:right;">
+-0.326
+</td>
+<td style="text-align:left;">
+**
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Drive-related words
+</td>
+<td style="text-align:right;">
+-10.790
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+-2.591
+</td>
+<td style="text-align:right;">
+-1.792
+</td>
+<td style="text-align:right;">
+-1.071
+</td>
+<td style="text-align:left;">
+***
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Relative words (space, time)
+</td>
+<td style="text-align:right;">
+-1.212
+</td>
+<td style="text-align:right;">
+0.226
+</td>
+<td style="text-align:right;">
+-0.687
+</td>
+<td style="text-align:right;">
+0.163
+</td>
+<td style="text-align:right;">
+-0.120
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Informal language
+</td>
+<td style="text-align:right;">
+8.140
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+1.171
+</td>
+<td style="text-align:right;">
+1.917
+</td>
+<td style="text-align:right;">
+0.808
+</td>
+<td style="text-align:left;">
+***
+</td>
+</tr>
+</tbody>
+</table></li>
+</ul>
+<p><strong>Comments</strong>: Higher mind (<em>t</em> =3.87,<em>d</em> = 0.38 and responsiveness (<em>t</em> =3.728,<em>d</em> = 0.37) attributed by partner in Audio over Text, but no differences in Conflict. Informal language is higher (<em>t</em> =8.14,<em>d</em> = 0.81) in Audio, whereas words related to affect (<em>t</em> =-4.61,<em>d</em> = -0.46), social relations (<em>t</em> =-4.3,<em>d</em> = -0.43), biological processes (<em>t</em> =-3.29,<em>d</em> = -0.33)and drives (affiliation, power, etc.; <em>t</em> =-10.79,<em>d</em> = -1.07) are more predominant in Text-based conversations.</p>
+</div>
+<div id="by-condition" class="section level2">
+<h2>By Condition</h2>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+Word categories by Extension
+</caption>
+<thead>
+<tr>
+<th style="text-align:center;">
+Extension
+</th>
+<th style="text-align:center;">
+Mind
+</th>
+<th style="text-align:center;">
+Conflict
+</th>
+<th style="text-align:center;">
+Responsiveness
+</th>
+<th style="text-align:center;">
+Function
+</th>
+<th style="text-align:center;">
+Affective
+</th>
+<th style="text-align:center;">
+Social
+</th>
+<th style="text-align:center;">
+Cognitive
+</th>
+<th style="text-align:center;">
+Perceptual
+</th>
+<th style="text-align:center;">
+Biological
+</th>
+<th style="text-align:center;">
+Drives
+</th>
+<th style="text-align:center;">
+Orientation
+</th>
+<th style="text-align:center;">
+Informal
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+Long
+</td>
+<td style="text-align:center;">
+5.42
+</td>
+<td style="text-align:center;">
+1.71
+</td>
+<td style="text-align:center;">
+4.52
+</td>
+<td style="text-align:center;">
+50.43
+</td>
+<td style="text-align:center;">
+5.97
+</td>
+<td style="text-align:center;">
+7.94
+</td>
+<td style="text-align:center;">
+15.16
+</td>
+<td style="text-align:center;">
+2.28
+</td>
+<td style="text-align:center;">
+1.76
+</td>
+<td style="text-align:center;">
+6.26
+</td>
+<td style="text-align:center;">
+8.16
+</td>
+<td style="text-align:center;">
+2.73
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+Short
+</td>
+<td style="text-align:center;">
+5.46
+</td>
+<td style="text-align:center;">
+1.51
+</td>
+<td style="text-align:center;">
+4.48
+</td>
+<td style="text-align:center;">
+50.17
+</td>
+<td style="text-align:center;">
+5.94
+</td>
+<td style="text-align:center;">
+8.63
+</td>
+<td style="text-align:center;">
+15.04
+</td>
+<td style="text-align:center;">
+2.40
+</td>
+<td style="text-align:center;">
+1.65
+</td>
+<td style="text-align:center;">
+6.68
+</td>
+<td style="text-align:center;">
+8.22
+</td>
+<td style="text-align:center;">
+2.57
+</td>
+</tr>
+</tbody>
+</table>
+<img src="Prelim_files/figure-html/descriptives2-1.png" width="672" />
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+Long minus Short (Negative estimates indicate higher values for Short)
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Variable
+</th>
+<th style="text-align:right;">
+t.stat
+</th>
+<th style="text-align:right;">
+p.value
+</th>
+<th style="text-align:right;">
+LL
+</th>
+<th style="text-align:right;">
+UL
+</th>
+<th style="text-align:right;">
+Cohens.D
+</th>
+<th style="text-align:left;">
+Sig
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Mind - attributed by partner
+</td>
+<td style="text-align:right;">
+-0.465
+</td>
+<td style="text-align:right;">
+0.642
+</td>
+<td style="text-align:right;">
+-0.225
+</td>
+<td style="text-align:right;">
+0.139
+</td>
+<td style="text-align:right;">
+-0.046
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Conflict - attributed by partner
+</td>
+<td style="text-align:right;">
+1.699
+</td>
+<td style="text-align:right;">
+0.090
+</td>
+<td style="text-align:right;">
+-0.032
+</td>
+<td style="text-align:right;">
+0.434
+</td>
+<td style="text-align:right;">
+0.169
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Responsiveness - attributed by partner
+</td>
+<td style="text-align:right;">
+0.424
+</td>
+<td style="text-align:right;">
+0.672
+</td>
+<td style="text-align:right;">
+-0.170
+</td>
+<td style="text-align:right;">
+0.264
+</td>
+<td style="text-align:right;">
+0.042
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Function words
+</td>
+<td style="text-align:right;">
+0.633
+</td>
+<td style="text-align:right;">
+0.527
+</td>
+<td style="text-align:right;">
+-0.536
+</td>
+<td style="text-align:right;">
+1.045
+</td>
+<td style="text-align:right;">
+0.063
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Affective words
+</td>
+<td style="text-align:right;">
+0.122
+</td>
+<td style="text-align:right;">
+0.903
+</td>
+<td style="text-align:right;">
+-0.324
+</td>
+<td style="text-align:right;">
+0.366
+</td>
+<td style="text-align:right;">
+0.012
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Social words
+</td>
+<td style="text-align:right;">
+-2.505
+</td>
+<td style="text-align:right;">
+0.013
+</td>
+<td style="text-align:right;">
+-1.246
+</td>
+<td style="text-align:right;">
+-0.150
+</td>
+<td style="text-align:right;">
+-0.249
+</td>
+<td style="text-align:left;">
+<ul>
+<li></td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cognitive words
+</td>
+<td style="text-align:right;">
+0.410
+</td>
+<td style="text-align:right;">
+0.682
+</td>
+<td style="text-align:right;">
+-0.480
+</td>
+<td style="text-align:right;">
+0.734
+</td>
+<td style="text-align:right;">
+0.041
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Perceptual words
+</td>
+<td style="text-align:right;">
+-0.726
+</td>
+<td style="text-align:right;">
+0.468
+</td>
+<td style="text-align:right;">
+-0.430
+</td>
+<td style="text-align:right;">
+0.198
+</td>
+<td style="text-align:right;">
+-0.072
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Biological words
+</td>
+<td style="text-align:right;">
+0.550
+</td>
+<td style="text-align:right;">
+0.583
+</td>
+<td style="text-align:right;">
+-0.285
+</td>
+<td style="text-align:right;">
+0.507
+</td>
+<td style="text-align:right;">
+0.055
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Drive-related words
+</td>
+<td style="text-align:right;">
+-1.844
+</td>
+<td style="text-align:right;">
+0.066
+</td>
+<td style="text-align:right;">
+-0.879
+</td>
+<td style="text-align:right;">
+0.028
+</td>
+<td style="text-align:right;">
+-0.183
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Relative words (space, time)
+</td>
+<td style="text-align:right;">
+-0.253
+</td>
+<td style="text-align:right;">
+0.800
+</td>
+<td style="text-align:right;">
+-0.483
+</td>
+<td style="text-align:right;">
+0.373
+</td>
+<td style="text-align:right;">
+-0.025
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Informal language
+</td>
+<td style="text-align:right;">
+0.775
+</td>
+<td style="text-align:right;">
+0.439
+</td>
+<td style="text-align:right;">
+-0.244
+</td>
+<td style="text-align:right;">
+0.561
+</td>
+<td style="text-align:right;">
+0.077
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+</tbody>
+</table></li>
+</ul>
+<p><strong>Comments</strong>: There are basically no significant differences among outcomes or language use between Short and Long conditions.</p>
+</div>
+</div>
+<div id="analyses" class="section level1">
+<h1>Analyses</h1>
+<div id="correlations" class="section level2">
+<h2>Correlations</h2>
+<div class="figure" style="text-align: center">
+<img src="Prelim_files/figure-html/correlations-1.png" alt="NOTE: blank spaces are non-significant correlations" width="960" />
+<p class="caption">
+NOTE: blank spaces are non-significant correlations
+</p>
+</div>
+<p><strong>Comments</strong>: Responsiveness, Conflict and Mind perceived by partner (<code>alt_Resp</code>, <code>alt_Conf</code>, and <code>alt_Dehum</code> respectively) are negatively associated with words related to Social relations, Biological Processes and Drives (positively for conflict); yet, positively associated with Informal language. Also perceived Conflict is associated with less affective words and more cognitive words.</p>
+</div>
+<div id="linear-plots" class="section level2">
+<h2>Linear Plots</h2>
+<p>These plots represent the linear relationship of each word category with all three outcomes. Datapoints were not plotted to avoid getting messy plots. <img src="Prelim_files/figure-html/plots-1.png" width="1152" style="display: block; margin: auto;" /> <strong>Comments</strong>: Note that Social terms, Biological words, Drive-related words -and to some extent Cognitive terms- describe similar patterns: the more frequent the use, the less likeable is the partner</p>
+</div>
+<div id="stepwise-regressions" class="section level2">
+<h2>Stepwise Regressions</h2>
+<p>For each one of the three partner perception outcomes, I ran astepwise regression model. As predictors, all sub-categories of words were introduced - except for function words were excluded from the analyses, since they were not giving consistent results and are hard to intepret. The three models were generated by taken the best regression from the stepwise analyses, and keeping only those predictors whose <code>Beta</code> coefficient was higher than 1.</p>
+<table style="text-align:center">
+<caption>
+<strong>Regressions: best models of words predicting partner perception</strong>
+</caption>
+<tr>
+<td colspan="4" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td colspan="3">
+Attributes perceived by partner
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td colspan="3" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+Mind
+</td>
+<td>
+Conflict
+</td>
+<td>
+Responsiveness
+</td>
+</tr>
+<tr>
+<td colspan="4" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Negative Affect: Sadness
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+-.47<sup>*</sup> (.20)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Social: Friends
+</td>
+<td>
+.49 (.27)
+</td>
+<td>
+</td>
+<td>
+.61 (.31)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Biological: Health
+</td>
+<td>
+-.08<sup>***</sup> (.02)
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Positive Affect
+</td>
+<td>
+</td>
+<td>
+-.17<sup>***</sup> (.04)
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Social: Female
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+-.39 (.26)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Cognitive: Insight
+</td>
+<td>
+</td>
+<td>
+-.11<sup>*</sup> (.04)
+</td>
+<td>
+.13<sup>**</sup> (.04)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Drives: Achievement
+</td>
+<td>
+-.19<sup>**</sup> (.06)
+</td>
+<td>
+.10 (.07)
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Drives: Reward
+</td>
+<td>
+.17<sup>*</sup> (.07)
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Cognitive: Causal
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+-.14<sup>**</sup> (.04)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Drive: Affiliation
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+-.09 (.04)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Time Orientation: Present
+</td>
+<td>
+-.04<sup>*</sup> (.02)
+</td>
+<td>
+.12<sup>***</sup> (.02)
+</td>
+<td>
+-.05<sup>*</sup> (.02)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Concerns: Home
+</td>
+<td>
+</td>
+<td>
+.21 (.20)
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Informal Language: Assent
+</td>
+<td>
+.06 (.03)
+</td>
+<td>
+-.15<sup>***</sup> (.04)
+</td>
+<td>
+.19<sup>***</sup> (.04)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Constant
+</td>
+<td>
+5.99<sup>***</sup> (.25)
+</td>
+<td>
+1.26<sup>***</sup> (.33)
+</td>
+<td>
+4.92<sup>***</sup> (.31)
+</td>
+</tr>
+<tr>
+<td colspan="4" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Observations
+</td>
+<td>
+406
+</td>
+<td>
+406
+</td>
+<td>
+406
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+R<sup>2</sup>
+</td>
+<td>
+.10
+</td>
+<td>
+.15
+</td>
+<td>
+.16
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Adjusted R<sup>2</sup>
+</td>
+<td>
+.08
+</td>
+<td>
+.14
+</td>
+<td>
+.14
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Residual Std. Error
+</td>
+<td>
+.89 (df = 399)
+</td>
+<td>
+1.11 (df = 399)
+</td>
+<td>
+1.03 (df = 397)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+F Statistic
+</td>
+<td>
+7.06<sup>***</sup> (df = 6; 399)
+</td>
+<td>
+11.85<sup>***</sup> (df = 6; 399)
+</td>
+<td>
+9.14<sup>***</sup> (df = 8; 397)
+</td>
+</tr>
+<tr>
+<td colspan="4" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+<em>Note:</em>
+</td>
+<td colspan="3">
+<sup><em></sup>p&lt;0.05; <sup><strong></sup>p&lt;0.01; <sup></strong></em></sup>p&lt;0.001
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div id="additional-analyses" class="section level1">
+<h1>Additional Analyses</h1>
+<div id="word-category-variations-by-topics" class="section level2">
+<h2>Word Category Variations by Topics</h2>
+<p>These plots show all LIWC categories analyzed by Topic. In most of the categories there are no notable variations, except for some that show significant differences. Below the plots, we give some insights about those differences.</p>
+<p><img src="Prelim_files/figure-html/categories_by_topic-1.png" width="1152" style="display: block; margin: auto;" /><img src="Prelim_files/figure-html/categories_by_topic-2.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>Some insights of more specific analyses:</p>
+<ul>
+<li>Differences in Drive words = Power words for <em>reparations</em>.</li>
+<li>Differences in Bio words = health-related word in <em>drugs</em> (i.e,pain).</li>
+<li>Differences in Perceptual words = hearing-related words in <em>speakers</em> (i.e. speaker, list, hush, sound, yelling)</li>
+<li>Differences in Social words = male-related words in <em>speakers</em> (e.g., he, guy ) and family-related in reparations (e.g., grandsons, relatives, folks).</li>
+<li>Differences in Affective words = anger-related words in <em>speakers</em> (e.g., asshole, jerk, intimidation, mean, threat)</li>
+<li>Differences in Function words: small and hard to interpret:
+<ul>
+<li>more pronouns but less adjectives, comparisons, quantifiers in <em>speakers</em></li>
+<li>more auxiliary verbs in <em>drugs</em>, and <em>reparations</em> more than <em>speakers</em></li>
+<li>less conjunctions in <em>reparations</em></li>
+</ul></li>
+</ul>
+</div>
+<div id="keywords-in-context-kwic-analysis" class="section level2">
+<h2>Keywords in context (KWIC) analysis</h2>
+Sample of keywords related to <strong>Insight</strong> cognitive processes.
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+docname
+</th>
+<th style="text-align:right;">
+from
+</th>
+<th style="text-align:right;">
+to
+</th>
+<th style="text-align:left;">
+pre
+</th>
+<th style="text-align:left;">
+keyword
+</th>
+<th style="text-align:left;">
+post
+</th>
+<th style="text-align:left;">
+pattern
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+text1
+</td>
+<td style="text-align:right;">
+25
+</td>
+<td style="text-align:right;">
+25
+</td>
+<td style="text-align:left;">
+good one as well .
+</td>
+<td style="text-align:left;">
+Seems
+</td>
+<td style="text-align:left;">
+we’ll be debating government reparations
+</td>
+<td style="text-align:left;">
+seems
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+text1
+</td>
+<td style="text-align:right;">
+50
+</td>
+<td style="text-align:right;">
+50
+</td>
+<td style="text-align:left;">
+very extremist . I DO
+</td>
+<td style="text-align:left;">
+think
+</td>
+<td style="text-align:left;">
+the government should be helping
+</td>
+<td style="text-align:left;">
+think
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+text1
+</td>
+<td style="text-align:right;">
+98
+</td>
+<td style="text-align:right;">
+98
+</td>
+<td style="text-align:left;">
+at risk youth . I
+</td>
+<td style="text-align:left;">
+feel
+</td>
+<td style="text-align:left;">
+as though it isn’t fair
+</td>
+<td style="text-align:left;">
+feel
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+text1
+</td>
+<td style="text-align:right;">
+129
+</td>
+<td style="text-align:right;">
+129
+</td>
+<td style="text-align:left;">
+for individualized stipends . I
+</td>
+<td style="text-align:left;">
+think
+</td>
+<td style="text-align:left;">
+something broader scoped , like
+</td>
+<td style="text-align:left;">
+think
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+text1
+</td>
+<td style="text-align:right;">
+135
+</td>
+<td style="text-align:right;">
+135
+</td>
+<td style="text-align:left;">
+something broader scoped , like
+</td>
+<td style="text-align:left;">
+learning
+</td>
+<td style="text-align:left;">
+centers or health clinics that
+</td>
+<td style="text-align:left;">
+learning
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+text1
+</td>
+<td style="text-align:right;">
+156
+</td>
+<td style="text-align:right;">
+156
+</td>
+<td style="text-align:left;">
+taxed for . Do you
+</td>
+<td style="text-align:left;">
+believe
+</td>
+<td style="text-align:left;">
+that direct individualized reparations should
+</td>
+<td style="text-align:left;">
+believe
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+text1
+</td>
+<td style="text-align:right;">
+193
+</td>
+<td style="text-align:right;">
+193
+</td>
+<td style="text-align:left;">
+socioeconomic status ? I don’t
+</td>
+<td style="text-align:left;">
+think
+</td>
+<td style="text-align:left;">
+they have either . An
+</td>
+<td style="text-align:left;">
+think
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+text1
+</td>
+<td style="text-align:right;">
+225
+</td>
+<td style="text-align:right;">
+225
+</td>
+<td style="text-align:left;">
+are so many people I
+</td>
+<td style="text-align:left;">
+know
+</td>
+<td style="text-align:left;">
+who have risked it all
+</td>
+<td style="text-align:left;">
+know
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+text1
+</td>
+<td style="text-align:right;">
+270
+</td>
+<td style="text-align:right;">
+270
+</td>
+<td style="text-align:left;">
+guarantee , I see no
+</td>
+<td style="text-align:left;">
+reason
+</td>
+<td style="text-align:left;">
+to not allow reparationsThe problem
+</td>
+<td style="text-align:left;">
+reason*
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+text1
+</td>
+<td style="text-align:right;">
+292
+</td>
+<td style="text-align:right;">
+292
+</td>
+<td style="text-align:left;">
+like allocating to social causesWhich
+</td>
+<td style="text-align:left;">
+means
+</td>
+<td style="text-align:left;">
+, likely , more taxes
+</td>
+<td style="text-align:left;">
+means
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+text2
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:left;">
+controversial speakers mostly for the
+</td>
+<td style="text-align:left;">
+effect
+</td>
+<td style="text-align:left;">
+it has on the students
+</td>
+<td style="text-align:left;">
+effect*
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+text2
+</td>
+<td style="text-align:right;">
+22
+</td>
+<td style="text-align:right;">
+22
+</td>
+<td style="text-align:left;">
+has on the students i
+</td>
+<td style="text-align:left;">
+think
+</td>
+<td style="text-align:left;">
+generally different viewpoints should be
+</td>
+<td style="text-align:left;">
+think
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+text2
+</td>
+<td style="text-align:right;">
+59
+</td>
+<td style="text-align:right;">
+59
+</td>
+<td style="text-align:left;">
+could endanger studentsand i dont
+</td>
+<td style="text-align:left;">
+believe
+</td>
+<td style="text-align:left;">
+that theres space for that
+</td>
+<td style="text-align:left;">
+believe
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+text2
+</td>
+<td style="text-align:right;">
+70
+</td>
+<td style="text-align:right;">
+70
+</td>
+<td style="text-align:left;">
+on campusas it hurts the
+</td>
+<td style="text-align:left;">
+learning
+</td>
+<td style="text-align:left;">
+environmentwhat do you think ?
+</td>
+<td style="text-align:left;">
+learning
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+text2
+</td>
+<td style="text-align:right;">
+74
+</td>
+<td style="text-align:right;">
+74
+</td>
+<td style="text-align:left;">
+the learning environmentwhat do you
+</td>
+<td style="text-align:left;">
+think
+</td>
+<td style="text-align:left;">
+? i understand your point
+</td>
+<td style="text-align:left;">
+think
+</td>
+</tr>
+</tbody>
+</table>
+Sample of keywords related to <strong>Time Orientation - Present</strong>.
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+docname
+</th>
+<th style="text-align:right;">
+from
+</th>
+<th style="text-align:right;">
+to
+</th>
+<th style="text-align:left;">
+pre
+</th>
+<th style="text-align:left;">
+keyword
+</th>
+<th style="text-align:left;">
+post
+</th>
+<th style="text-align:left;">
+pattern
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+text1
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:left;">
+Hello !
+</td>
+<td style="text-align:left;">
+It’s
+</td>
+<td style="text-align:left;">
+nice to meet you It’s
+</td>
+<td style="text-align:left;">
+it’s
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+text1
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:left;">
+Hello ! It’s nice to
+</td>
+<td style="text-align:left;">
+meet
+</td>
+<td style="text-align:left;">
+you It’s been a good
+</td>
+<td style="text-align:left;">
+meet
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+text1
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:left;">
+It’s nice to meet you
+</td>
+<td style="text-align:left;">
+It’s
+</td>
+<td style="text-align:left;">
+been a good day so
+</td>
+<td style="text-align:left;">
+it’s
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+text1
+</td>
+<td style="text-align:right;">
+16
+</td>
+<td style="text-align:right;">
+16
+</td>
+<td style="text-align:left;">
+good day so far !
+</td>
+<td style="text-align:left;">
+Hope
+</td>
+<td style="text-align:left;">
+you’ve had a good one
+</td>
+<td style="text-align:left;">
+hope
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+text1
+</td>
+<td style="text-align:right;">
+25
+</td>
+<td style="text-align:right;">
+25
+</td>
+<td style="text-align:left;">
+good one as well .
+</td>
+<td style="text-align:left;">
+Seems
+</td>
+<td style="text-align:left;">
+we’ll be debating government reparations
+</td>
+<td style="text-align:left;">
+seems
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+text1
+</td>
+<td style="text-align:right;">
+27
+</td>
+<td style="text-align:right;">
+27
+</td>
+<td style="text-align:left;">
+as well . Seems we’ll
+</td>
+<td style="text-align:left;">
+be
+</td>
+<td style="text-align:left;">
+debating government reparations for slavery
+</td>
+<td style="text-align:left;">
+be
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+text1
+</td>
+<td style="text-align:right;">
+35
+</td>
+<td style="text-align:right;">
+35
+</td>
+<td style="text-align:left;">
+reparations for slavery . I’d
+</td>
+<td style="text-align:left;">
+like
+</td>
+<td style="text-align:left;">
+to first say that my
+</td>
+<td style="text-align:left;">
+like*
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+text1
+</td>
+<td style="text-align:right;">
+38
+</td>
+<td style="text-align:right;">
+38
+</td>
+<td style="text-align:left;">
+. I’d like to first
+</td>
+<td style="text-align:left;">
+say
+</td>
+<td style="text-align:left;">
+that my stance on this
+</td>
+<td style="text-align:left;">
+say
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+text1
+</td>
+<td style="text-align:right;">
+44
+</td>
+<td style="text-align:right;">
+44
+</td>
+<td style="text-align:left;">
+that my stance on this
+</td>
+<td style="text-align:left;">
+isn’t
+</td>
+<td style="text-align:left;">
+very extremist . I DO
+</td>
+<td style="text-align:left;">
+isn’t
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+text1
+</td>
+<td style="text-align:right;">
+49
+</td>
+<td style="text-align:right;">
+49
+</td>
+<td style="text-align:left;">
+isn’t very extremist . I
+</td>
+<td style="text-align:left;">
+DO
+</td>
+<td style="text-align:left;">
+think the government should be
+</td>
+<td style="text-align:left;">
+do
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+text1
+</td>
+<td style="text-align:right;">
+50
+</td>
+<td style="text-align:right;">
+50
+</td>
+<td style="text-align:left;">
+very extremist . I DO
+</td>
+<td style="text-align:left;">
+think
+</td>
+<td style="text-align:left;">
+the government should be helping
+</td>
+<td style="text-align:left;">
+think
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+text1
+</td>
+<td style="text-align:right;">
+54
+</td>
+<td style="text-align:right;">
+54
+</td>
+<td style="text-align:left;">
+DO think the government should
+</td>
+<td style="text-align:left;">
+be
+</td>
+<td style="text-align:left;">
+helping communities impacted by slavery
+</td>
+<td style="text-align:left;">
+be
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+text1
+</td>
+<td style="text-align:right;">
+82
+</td>
+<td style="text-align:right;">
+82
+</td>
+<td style="text-align:left;">
+a more community level .
+</td>
+<td style="text-align:left;">
+Like
+</td>
+<td style="text-align:left;">
+providing communities in Oakland with
+</td>
+<td style="text-align:left;">
+like*
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+text1
+</td>
+<td style="text-align:right;">
+91
+</td>
+<td style="text-align:right;">
+91
+</td>
+<td style="text-align:left;">
+Oakland with afterschool centers that
+</td>
+<td style="text-align:left;">
+can
+</td>
+<td style="text-align:left;">
+help at risk youth .
+</td>
+<td style="text-align:left;">
+can
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+text1
+</td>
+<td style="text-align:right;">
+98
+</td>
+<td style="text-align:right;">
+98
+</td>
+<td style="text-align:left;">
+at risk youth . I
+</td>
+<td style="text-align:left;">
+feel
+</td>
+<td style="text-align:left;">
+as though it isn’t fair
+</td>
+<td style="text-align:left;">
+feel
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Comment:</strong> Both categories deal with extremely common expressions; so it’s hard to interpret what that could mean in terms of difference between conditions or potential mediational effects. Also, just as assent words, it could be a confound of spoken conversation.</p>
+</div>
+<div id="more-word-categories-morality-and-politeness" class="section level2">
+<h2>More Word Categories: Morality and Politeness</h2>
+<div id="morality-by-moral-foundations-dictionary" class="section level3">
+<h3>Morality (by Moral Foundations Dictionary)</h3>
+<p><img src="Prelim_files/figure-html/MFD-1.png" width="1152" style="display: block; margin: auto;" /><img src="Prelim_files/figure-html/MFD-2.png" width="1152" style="display: block; margin: auto;" /></p>
+<p><strong>Comment</strong>: In the Drug topic <code>Sanctity</code> is more salient because of the words related to health. Similarly, words related to fairness - e.g., retribution, justice, inequality - are more salient in the Reparations topic. Now, we can see that text conversations were definitely more moralized than audio conversations, in all domains. It doesn’t seem to be an interaction between medium and moral foundations - small differences between mediums in all foundatiosn (Cohen’s d between .28 and .42).</p>
+</div>
+<div id="politeness-from-yeomans-kantor-tingley-2018" class="section level3">
+<h3>Politeness (from Yeomans, Kantor &amp; Tingley, 2018)</h3>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Feature.Name
+</th>
+<th style="text-align:left;">
+Uses.POS.Tags
+</th>
+<th style="text-align:left;">
+Description
+</th>
+<th style="text-align:left;">
+Example
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Hello
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+“hi”, “hello”, “hey”
+</td>
+<td style="text-align:left;">
+“Hi, how are you today?”
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Goodbye
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+“goodbye”, “bye”, “see you later”
+</td>
+<td style="text-align:left;">
+“That’s my best offer. Bye!”
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Please Start
+</td>
+<td style="text-align:left;">
+Yes
+</td>
+<td style="text-align:left;">
+Please to start sentence
+</td>
+<td style="text-align:left;">
+“Please let me know if that works”
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Please
+</td>
+<td style="text-align:left;">
+Both
+</td>
+<td style="text-align:left;">
+Please mid-sentence
+</td>
+<td style="text-align:left;">
+“Let me know if that works, please”
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gratitude
+</td>
+<td style="text-align:left;">
+Both
+</td>
+<td style="text-align:left;">
+“thank you”, “i appreciate”, etc.
+</td>
+<td style="text-align:left;">
+“Thanks for your interest”
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Apologies
+</td>
+<td style="text-align:left;">
+Both
+</td>
+<td style="text-align:left;">
+“sorry”, “oops”, “excuse me”, etc.
+</td>
+<td style="text-align:left;">
+“I’m sorry for being so blunt”
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Formal Title
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+“sir”, “madam”, “mister”, etc.
+</td>
+<td style="text-align:left;">
+“Sir, that is quite an offer.”
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Informal Title
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+“buddy”, “chief”, “boss”, etc.
+</td>
+<td style="text-align:left;">
+“Dude, that is quite an offer.”
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Swearing
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+Vulgarity of all sorts
+</td>
+<td style="text-align:left;">
+“The dang price is too high”
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Could You
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+Indirect request
+</td>
+<td style="text-align:left;">
+“Could you lower the price?”
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Can You
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+Direct request
+</td>
+<td style="text-align:left;">
+“Can you lower the price?”
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Bare Command
+</td>
+<td style="text-align:left;">
+Yes
+</td>
+<td style="text-align:left;">
+Unconjugated verb to start sentence
+</td>
+<td style="text-align:left;">
+“Lower the price for me”
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Let Me Know
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+“let me know”
+</td>
+<td style="text-align:left;">
+“Let me know if that works”
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Affirmation
+</td>
+<td style="text-align:left;">
+Yes
+</td>
+<td style="text-align:left;">
+Short appreciation to start sentence
+</td>
+<td style="text-align:left;">
+“Cool, that will work out then”
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Agreement
+</td>
+<td style="text-align:left;">
+Yes
+</td>
+<td style="text-align:left;">
+Explicit statement of agreement
+</td>
+<td style="text-align:left;">
+“I mostly agree with that”
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Acknowledgement
+</td>
+<td style="text-align:left;">
+Yes
+</td>
+<td style="text-align:left;">
+Explicit statement of understanding
+</td>
+<td style="text-align:left;">
+“I understand your point”
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Conjunction Start
+</td>
+<td style="text-align:left;">
+Yes
+</td>
+<td style="text-align:left;">
+Begin sentence with conjunction
+</td>
+<td style="text-align:left;">
+“And if that works for you”
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Reasoning
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+Explicit reference to reasons
+</td>
+<td style="text-align:left;">
+“I want to explain my offer price”
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Resassurance
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+Minimizing other’s problems
+</td>
+<td style="text-align:left;">
+“Don’t worry, we’re still on track”
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ask Agency
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+Request an action for self
+</td>
+<td style="text-align:left;">
+“Let me step back for a minute”
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Give Agency
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+Suggest an action for other
+</td>
+<td style="text-align:left;">
+“I want to let you come out ahead”
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hedges
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+Indicators of uncertainty
+</td>
+<td style="text-align:left;">
+“I might take the deal”
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Actually
+</td>
+<td style="text-align:left;">
+Both
+</td>
+<td style="text-align:left;">
+Indicators of certainty
+</td>
+<td style="text-align:left;">
+“This is definitely a good idea.”
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Positive
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+Positive emotion words
+</td>
+<td style="text-align:left;">
+“that is a great deal”
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Negative
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+Negative emotion words
+</td>
+<td style="text-align:left;">
+“that is a bad deal”
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Negation
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+Contradiction words
+</td>
+<td style="text-align:left;">
+“This cannot be your best offer”
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Questions
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+Question mark count
+</td>
+<td style="text-align:left;">
+“Is this for real?”
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WH Questions
+</td>
+<td style="text-align:left;">
+Yes
+</td>
+<td style="text-align:left;">
+Questions w/ WH words (how, why, etc)
+</td>
+<td style="text-align:left;">
+“Why did you settle on that value?”
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+YesNo Questions
+</td>
+<td style="text-align:left;">
+Yes
+</td>
+<td style="text-align:left;">
+Questions w/o WH words
+</td>
+<td style="text-align:left;">
+“Is this for real?”
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+By The Way
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+“by the way”
+</td>
+<td style="text-align:left;">
+“By the way, my old offer stands”
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Adverbial Just
+</td>
+<td style="text-align:left;">
+Yes
+</td>
+<td style="text-align:left;">
+modifying a quantity with “just”
+</td>
+<td style="text-align:left;">
+“It is just enough to be worth it”
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Filler Pause
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+Filler words and verbal pauses
+</td>
+<td style="text-align:left;">
+“That would be, um, fine”
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+For Me
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+“for me”
+</td>
+<td style="text-align:left;">
+“It would be great for me”
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+For You
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+“for you”
+</td>
+<td style="text-align:left;">
+“It would be great for you”
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+First Person Plural
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+First-person plural pronouns
+</td>
+<td style="text-align:left;">
+“it’s a good deal for both of us”
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+First Person Single
+</td>
+<td style="text-align:left;">
+Both
+</td>
+<td style="text-align:left;">
+First-person singular mid-sentence
+</td>
+<td style="text-align:left;">
+“It would benefit me, as well”
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Second Person Single
+</td>
+<td style="text-align:left;">
+Both
+</td>
+<td style="text-align:left;">
+Second person mid-sentence
+</td>
+<td style="text-align:left;">
+“It would benefit you, as well”
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+First Person Start
+</td>
+<td style="text-align:left;">
+Yes
+</td>
+<td style="text-align:left;">
+First-person singular to start sentence
+</td>
+<td style="text-align:left;">
+“I would take that deal”
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Second Person Start
+</td>
+<td style="text-align:left;">
+Yes
+</td>
+<td style="text-align:left;">
+Second-person to start sentence
+</td>
+<td style="text-align:left;">
+“You should take that deal”
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Impersonal Pronoun
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+Non-person referents
+</td>
+<td style="text-align:left;">
+“That is a deal”
+</td>
+</tr>
+</tbody>
+</table>
+<pre><code>## Note: Some features cannot be computed without part-of-speech tagging. See ?spacyr::spacyr for details.</code></pre>
+<p><img src="Prelim_files/figure-html/Politeness-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<pre><code>## Note: Some features cannot be computed without part-of-speech tagging. See ?spacyr::spacyr for details.</code></pre>
+<p><img src="Prelim_files/figure-html/Politeness-2.png" width="1152" style="display: block; margin: auto;" /><img src="Prelim_files/figure-html/Politeness-3.png" width="1152" style="display: block; margin: auto;" /> <strong>Note</strong>: Some politeness terms were not plotted for not showing any differences among conditions.</p>
+</div>
+</div>
+<div id="agreement-analyses" class="section level2">
+<h2>Agreement Analyses</h2>
+<div id="dichotomous-outcome---did-you-agree-with-your-conversation-partner" class="section level3">
+<h3>Dichotomous Outcome - Did you agree with your conversation partner?</h3>
+<p>For these analyses we considered agreement as the perception of each participant of having reached an agreement with her conversation partner - regardless of their actual dis/agreement.</p>
+<p><img src="Prelim_files/figure-html/agree_dich-1.png" width="672" /><img src="Prelim_files/figure-html/agree_dich-2.png" width="672" /></p>
+<p>We ran a generalized linear mixed model to estimate the influence of categories of words used on the likelihood of perceiving agreement. Pair was introduced as a random variable.</p>
+<table style="border-collapse:collapse; border:none;">
+<caption style="font-weight: bold; text-align:left;">
+Logistic Linear Mixed Model predicting Agreement
+</caption>
+<tr>
+<th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
+ 
+</th>
+<th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
+Perceived Agreement
+</th>
+</tr>
+<tr>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  text-align:left; ">
+Predictors
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+Odds Ratios
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+CI
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+p
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+(Intercept)
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.05
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.00 – 14.72
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.299
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+Function words
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+1.02
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.93 – 1.12
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.676
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+Affective terms
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+1.12
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.90 – 1.40
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.304
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+Social terms
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+1.09
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.95 – 1.24
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.222
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+Cognitive Processes
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.97
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.86 – 1.10
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.679
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+Biological Processes
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+1.63
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+1.13 – 2.35
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>0.009</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+Drive-related words
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+1.18
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.98 – 1.42
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.079
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+Spatio-temporal terms
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+1.01
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.86 – 1.19
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.878
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+Informal language
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.65
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.51 – 0.82
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>&lt;0.001
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+Topic:Reparations
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+1.07
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.23 – 4.86
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.933
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+Topic:Speakers
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+2.08
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.49 – 8.92
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.322
+</td>
+</tr>
+<tr>
+<td colspan="4" style="font-weight:bold; text-align:left; padding-top:.8em;">
+Random Effects
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
+σ<sup>2</sup>
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
+3.29
+</td>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
+τ<sub>00</sub> <sub>Pair</sub>
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
+3.85
+</td>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
+ICC
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
+0.54
+</td>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
+N <sub>Pair</sub>
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
+203
+</td>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm; border-top:1px solid;">
+Observations
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="3">
+406
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
+Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
+0.247 / 0.653
+</td>
+</tr>
+</table>
+<table style="border-collapse:collapse; border:none;">
+<caption style="font-weight: bold; text-align:left;">
+Word Categories predicting Perceived Agreement
+</caption>
+<tr>
+<th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
+ 
+</th>
+<th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
+Perceived Agreement
+</th>
+</tr>
+<tr>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  text-align:left; ">
+Predictors
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+Odds Ratios
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+CI
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+p
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+(Intercept)
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+2.99
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.54 – 16.60
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.210
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+Cognitive: Insight
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.85
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.66 – 1.10
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.224
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+Present-oriented terms
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+1.06
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.93 – 1.20
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.412
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+Informal assentment words
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.48
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.36 – 0.63
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>&lt;0.001
+</td>
+</tr>
+<tr>
+<td colspan="4" style="font-weight:bold; text-align:left; padding-top:.8em;">
+Random Effects
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
+σ<sup>2</sup>
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
+3.29
+</td>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
+τ<sub>00</sub> <sub>Pair</sub>
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
+3.29
+</td>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
+ICC
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
+0.50
+</td>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
+N <sub>Pair</sub>
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
+203
+</td>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm; border-top:1px solid;">
+Observations
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="3">
+406
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
+Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
+0.141 / 0.570
+</td>
+</tr>
+</table>
+</div>
+<div id="aggregated-outcome---actual-approach-between-positions" class="section level3">
+<h3>Aggregated Outcome - Actual approach between positions</h3>
+<p>To explore actual agreement as a result of the converation among pairs, we estimated an <code>Approach</code> variable for each pair. Basically, we estimated the absolute distances between both participants’ positions before and after the conversation, and then computed the difference between the two time points.</p>
+<p><span class="math display">\[ Approach =  |Attitude^{Pre}_{P1} - Attitude^{Pre}_{P2}| - |Attitude^{Post}_{P1} - Attitude^{Post}_{P2}| \]</span></p>
+<p>In other words, this measures estimates how much both positions got closer, where higher scores mean that both positions got closer.</p>
+<p><img src="Prelim_files/figure-html/approach_setup-1.png" width="672" /><img src="Prelim_files/figure-html/approach_setup-2.png" width="672" /></p>
+<p><strong>Comment</strong>: Further analyses with the <code>Approach</code> outcome might require to take a dyadic analytical approach to the data, since we have reason to believe that pairs are not two cases in one group, but two participants that are interacting and influencing one another. Therefore, we can assume that there might be some shared variance at the pair-level that a linear mixed model might not capture.</p>
+</div>
+</div>
+<div id="mediation-analyses" class="section level2">
+<h2>Mediation Analyses</h2>
+<div id="separate-analyses" class="section level3">
+<h3>Separate Analyses</h3>
+<p>We ran mediation analyses for the three partner attribution outcomes (Mind-like , Conflictive and Responsive). Four word categories were tested for mediation between Medium - Audio vs. Text - and outcomes: Assent words, Present-orientation words, Insight words, Moralized words and Politeness features. In the table below we listed the indirect effects of all mediators for all outcomes, run separately.</p>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Mediator
+</th>
+<th style="text-align:left;">
+Mindful
+</th>
+<th style="text-align:left;">
+Conflictive
+</th>
+<th style="text-align:left;">
+Responsive
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Assent
+</td>
+<td style="text-align:left;">
+0.07
+</td>
+<td style="text-align:left;">
+-0.33***
+</td>
+<td style="text-align:left;">
+0.26***
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Present
+</td>
+<td style="text-align:left;">
+-0.02
+</td>
+<td style="text-align:left;">
+0.03
+</td>
+<td style="text-align:left;">
+-0.01
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Insight
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+-0.04
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Moral
+</td>
+<td style="text-align:left;">
+0.05
+</td>
+<td style="text-align:left;">
+-0.14**
+</td>
+<td style="text-align:left;">
+0.13**
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Polite
+</td>
+<td style="text-align:left;">
+-0.014
+</td>
+<td style="text-align:left;">
+0.098*
+</td>
+<td style="text-align:left;">
+-0.076*
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="complete-mediation-models" class="section level3">
+<h3>Complete Mediation Models</h3>
+<p>Then, we ran full SEM introducing the four word categories as mediators for each one of the outcomes.</p>
+<div id="partner-humanization" class="section level4">
+<h4>Partner Humanization</h4>
+<p><img src="Prelim_files/figure-html/full_SEM-1.png" width="1536" style="display: block; margin: auto;" /></p>
+</div>
+<div id="partner-perceived-as-conflictive" class="section level4">
+<h4>Partner perceived as Conflictive</h4>
+<p><img src="Prelim_files/figure-html/full_SEM2-1.png" width="1536" style="display: block; margin: auto;" /></p>
+</div>
+<div id="partner-perceived-as-responsive" class="section level4">
+<h4>Partner perceived as Responsive</h4>
+<p><img src="Prelim_files/figure-html/full_SEM3-1.png" width="1536" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

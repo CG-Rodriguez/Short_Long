@@ -2,7 +2,12 @@
 title: "Preliminary Text-Analyses"
 author: "Cristian Rodriguez"
 date: "8/8/2019"
-
+output: 
+  html_document: 
+    toc: true
+    toc_depth: 4
+    toc_float:
+      collapsed: false
 knit: (function(input_file, encoding) {
   out_dir <- 'docs';
   rmarkdown::render(input_file,
@@ -500,6 +505,8 @@ stargazer(Best_FitH, Best_FitC, Best_FitR,type = "html", dep.var.labels = c("Min
 ```
 
 
+
+
 # Additional Analyses
 
 ## Word Category Variations by Topics  
@@ -601,6 +608,8 @@ Output_MFD %>%
 ```{r Politeness,  fig.align="center", fig.dim=c(12,12), }
 library(politeness)
 
+feature_table %>% kable() %>% kable_styling()
+
 
 #Plotting proportion
 Pol1<-politeness(Huge$Text,  metric = "average", drop_blank = TRUE)
@@ -643,6 +652,114 @@ ggcorrplot(cormat, type = "lower", p.mat = pmat, show.legend = TRUE, lab = TRUE,
 ```
 **Note**: Some politeness terms were not plotted for not showing any differences among conditions.
 
+## Agreement Analyses
+
+### Dichotomous Outcome - Did you agree with your conversation partner?
+
+For these analyses we considered agreement as the perception of each participant of having reached an agreement with her conversation partner - regardless of their actual dis/agreement.
+
+``` {r agree_dich}
+
+data_Ag<-Output %>%
+  mutate(Dich_Agree = if_else(Agreed == 0, "Agreed", "Disagreed"),
+         Ev_Agree = Att_Change,
+         Att_Change = Real_Change)
+
+data_Ag %>%
+  ggplot(aes(fill = Dich_Agree)) + 
+  geom_bar(aes(Topic), position = position_dodge(width = .6)) + 
+  geom_bar(aes(Medium), position = position_dodge(width = .6)) + 
+  geom_bar(aes(Extension), position = position_dodge(width = .6)) + 
+  scale_x_discrete(limits = c("Audio", "Text", "Short", "Long", "Drugs", "Reparations", "Speakers")) + 
+  labs(title = "Conditions and Perceived Agreement", 
+       x = "Medium                      Extension                         Topic   ", 
+       fill = "Perceived Agreement") 
+
+data_Ag %>%
+  melt(id.vars =  "Dich_Agree", measure.vars = c("alt_Dehum", "alt_Conf", "alt_Resp")) %>%
+  ggplot(aes(variable, value, fill = Dich_Agree)) + 
+  stat_summary(geom = "col", position = position_dodge2(width = .6)) + 
+  stat_summary(geom = "errorbar", position = position_dodge2(width = .6)) + 
+  scale_x_discrete(labels = c("Mind", "Conflictive", "Responsive"))+
+  labs(title = "Partner Perception and Perceived Agreement", x = "Partner Perception", fill = "Perceived Agreement") 
+
+```
+
+We ran a generalized linear mixed model to estimate the influence of categories of words used on the likelihood of perceiving agreement. Pair was introduced as a random variable.
+
+```{r glm_dich1}
+
+library(lme4)
+Mixed<-glmer(data=data_Ag, Agreed ~ function..function.words. + affect..affect. + social..social. + 
+              cogproc..cognitive.processes. + bio..biological.processes. + drives..drives. + relativ..relativity. +
+              informal..informal.language. + Topic + (1 | Pair), family = binomial)
+
+sjPlot::tab_model(Mixed,title = "Logistic Linear Mixed Model predicting Agreement",dv.labels = "Perceived Agreement",
+                  pred.labels = c("(Intercept)", "Function words", "Affective terms", "Social terms", 
+                  "Cognitive Processes", "Biological Processes", "Drive-related words",
+                            "Spatio-temporal terms", "Informal language", "Topic:Reparations", "Topic:Speakers"))
+```
+
+
+```{r glm_dich2}
+
+Mixed2<-glmer(data=data_Ag, Agreed ~ cogproc..cognitive.processes..insight..insight.+
+                timeorient..time.orientation..focuspresent..present.focus.+
+                informal..informal.language..assent..assent. +  (1 | Pair), family = binomial)
+
+sjPlot::tab_model(Mixed2,title = "Word Categories predicting Perceived Agreement",dv.labels = "Perceived Agreement",
+                  pred.labels = c("(Intercept)", "Cognitive: Insight", "Present-oriented terms", 
+                                  "Informal assentment words")) 
+
+
+```
+
+
+### Aggregated Outcome - Actual approach between positions
+
+To explore actual agreement as a result of the converation among pairs, we estimated an `Approach` variable for each pair. Basically, we estimated the absolute distances between both participants' positions before and after the conversation, and then computed the difference between the two time points. 
+
+$$ Approach =  |Attitude^{Pre}_{P1} - Attitude^{Pre}_{P2}| - |Attitude^{Post}_{P1} - Attitude^{Post}_{P2}| $$
+
+In other words, this measures estimates how much both positions got closer, where higher scores mean that both positions got closer.
+
+``` {r approach_setup}
+
+## Loop for the  Approach measure
+data_Ag$Approach<-vector(mode = "numeric", length = nrow(data_Ag))
+for (i in 1:nrow(data_Ag)){
+  
+  Pair_ID<-Huge$Pair[i]
+  Subjects<-Huge$ID1[data_Ag$Pair == Pair_ID]
+  Pre_Diff<-abs(Huge$Pre_Att[Huge$ID1 == Subjects[1]] - Huge$Pre_Att[Huge$ID1 == Subjects[2]])
+  Post_Diff<-abs(Huge$Post_Att[Huge$ID1 == Subjects[1]] - Huge$Post_Att[Huge$ID1 == Subjects[2]])
+  Diff_Diff<- Pre_Diff - Post_Diff
+  data_Ag$Approach[i]<-Diff_Diff
+}
+
+
+data_Ag %>%
+  mutate(Approach = as.factor(Approach)) %>%
+  melt(id.vars = "Dich_Agree", measure.vars =  "Approach") %>%
+  ggplot(aes(value, fill = Dich_Agree)) + geom_bar(stat = "count", position = "dodge") +
+  labs(title = "Approach estimates, by Perceived Agreement", y = "Approach", fill = "Perceived Agreement")
+
+
+data_Ag %>%
+  mutate(Approach = factor(Approach, labels = -2:4)) %>%
+  ggplot(aes(fill = Approach))+
+  geom_bar(aes(x = Topic), position = "dodge") + 
+  geom_bar(aes(x = Medium), position = "dodge") + 
+  geom_bar(aes(x = Extension), position = "dodge")+ 
+  scale_fill_brewer(palette = 'Blues' ) + 
+  scale_x_discrete(limits = c("Audio", "Text", "Short", "Long", "Drugs", "Reparations", "Speakers"))+
+labs(title = "Approach estimates, by Conditions", y = "count", fill = "Approach", 
+     x = "Medium                    Extension                                  Topic       ")
+
+```
+
+
+**Comment**: Further analyses with the `Approach` outcome might require to take a dyadic analytical approach to the data, since we have reason to believe that pairs are not two cases in one group, but two participants that are interacting and influencing one another. Therefore, we can assume that there might be some shared variance at the pair-level that a linear mixed model might not capture. 
 
 
 ## Mediation Analyses
